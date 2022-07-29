@@ -28,6 +28,7 @@
     "react-dom": "18.2.0",
     "react-is": "18.2.0",
     "react-query": "3",
+    "react-router-dom": "6",
     "regenerator-runtime": "0.13.7",
     "slugify": "^1.6.5",
     "styled-components": "5.3.5",
