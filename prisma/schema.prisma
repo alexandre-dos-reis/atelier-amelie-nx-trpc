@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Artwork {
+  id                  Int       @id @default(autoincrement())
+  name                String
+  slug                String
+  description         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  madeAt              DateTime?
+  showInGallery       Boolean   @default(false)
+  showInPortfolio     Boolean   @default(false)
+  filename            String
+  watermarkedFilename String?
+  designState         String?
+}
+
+model Category {
+  id            Int      @id @default(autoincrement())
+  name          String
+  slug          String
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  showInGallery Boolean  @default(false)
+}

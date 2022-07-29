@@ -5,6 +5,7 @@
     "admin": "apps/admin",
     "admin-e2e": "apps/admin-e2e",
     "api": "apps/api",
-    "api-interfaces": "libs/api-interfaces"
+    "prisma": "libs/prisma",
+    "trpc-routers": "libs/trpc-routers"
   }
 }

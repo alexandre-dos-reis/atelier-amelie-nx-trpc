@@ -1,0 +1,35 @@
+---
+version: '3.7'
+services:
+
+  aa-postgres:
+    container_name: aa-postgres
+    image: postgres:14-alpine
+    networks:
+      - aa-backend
+    volumes:
+      - ./docker-volumes/aa-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:  
+      - ${DB_PORT}:5432
+    restart: unless-stopped
+  
+  aa-adminer:
+    container_name: aa-adminer
+    image: adminer:latest
+    restart: always
+    networks:
+      - aa-backend
+    environment: 
+      ADMINER_DESIGN: dracula
+      ADMINER_DEFAULT_SERVER: aa-postgres
+    depends_on: 
+      - aa-postgres
+    ports:
+      - 9999:8080
+
+networks:
+  aa-backend: {}

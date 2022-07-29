@@ -1,16 +1,22 @@
 import * as express from 'express';
-import { Message } from '@atelier-amelie-nx-trpc/api-interfaces';
+import * as trpcExpress from '@trpc/server/adapters/express';
+import * as trpc from '@trpc/server';
+import { appRouter } from '@atelier-amelie-nx-trpc/trpc-routers';
+import * as cors from 'cors';
+import { createContext } from './utils/trpc';
 
 const app = express();
-
-const greeting: Message = { message: 'Welcome to api!' };
-
-app.get('/api', (req, res) => {
-  res.send(greeting);
-});
+app.use(cors());
+app.use(
+  '/trpc',
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
-  console.log('Listening at http://localhost:' + port + '/api');
+  console.log(`Listening at http://localhost:${port}`);
 });
 server.on('error', console.error);
