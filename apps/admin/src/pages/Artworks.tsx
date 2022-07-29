@@ -1,6 +1,6 @@
 import { trpc } from '../utils/trpc';
 
-export const Home = () => {
+export const Artworks = () => {
   const { data, isLoading, isError, error } = trpc.useQuery(['artwork.getAll']);
 
   if (isError) return <div>{error.message}</div>;

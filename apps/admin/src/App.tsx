@@ -1,8 +1,8 @@
 import { trpc } from './utils/trpc';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Home } from './pages/Home';
-import { Artwork } from './pages/Artwork';
+import { Artworks } from './pages/Artworks';
+import { Artwork } from './pages/Artworks';
 
 export const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -16,7 +16,7 @@ export const App = () => {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <Artwork id={2} />
-        <Home />
+        <Artworks />
       </QueryClientProvider>
     </trpc.Provider>
   );
