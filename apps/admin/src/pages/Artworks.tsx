@@ -1,6 +1,6 @@
 import { trpc } from '../utils/trpc';
-import { Link, Outlet } from 'react-router-dom';
-import { routes } from '../utils/routes';
+import { VStack } from '@chakra-ui/react';
+import { ArtworkListItem } from '../components/artworks';
 
 export const Artworks = () => {
   const { data, isLoading, isError, error } = trpc.useQuery(['artwork.getAll']);
@@ -9,14 +9,10 @@ export const Artworks = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <ul>
+    <VStack spacing="24px">
       {data?.artworks.map((a) => (
-        <li key={a.id}>
-          <Link to={`${routes['artworks'].url}/${a.id}`} key={a.id}>
-            {a.name}
-          </Link>
-        </li>
+        <ArtworkListItem a={a} />
       ))}
-    </ul>
+    </VStack>
   );
 };
