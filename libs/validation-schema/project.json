@@ -1,20 +1,20 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/prisma/src",
+  "sourceRoot": "libs/validation-schema/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/prisma/**/*.ts"]
+        "lintFilePatterns": ["libs/validation-schema/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/prisma"],
+      "outputs": ["coverage/libs/validation-schema"],
       "options": {
-        "jestConfig": "libs/prisma/jest.config.ts",
+        "jestConfig": "libs/validation-schema/jest.config.ts",
         "passWithNoTests": true
       }
     }

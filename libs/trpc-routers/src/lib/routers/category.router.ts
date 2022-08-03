@@ -1,8 +1,6 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../utils/prisma';
 
 export const CategoryRouter = trpc
   .router()
@@ -10,7 +8,7 @@ export const CategoryRouter = trpc
   .query('getAll', {
     async resolve() {
       return {
-        artworks: await prisma.artwork.findMany(),
+        categories: await prisma.category.findMany(),
       };
     },
   });

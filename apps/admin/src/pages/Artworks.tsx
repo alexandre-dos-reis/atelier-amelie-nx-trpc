@@ -6,10 +6,15 @@ import { searchBarTextAtom, showSearchBarAtom } from '../store';
 
 export const Artworks = () => {
   const [searchBarText] = useAtom(searchBarTextAtom);
+  // const [, setShowSearchBar] = useAtom(showSearchBarAtom);
+  // setShowSearchBar(true);
+
   const { data, isLoading, isError, error } = trpc.useQuery(['artwork.getAll']);
 
   if (isError) return <div>{error.message}</div>;
   if (isLoading) return <div>Loading...</div>;
+
+  console.log(data?.artworks)
 
   return (
     <VStack spacing="24px" m={2}>

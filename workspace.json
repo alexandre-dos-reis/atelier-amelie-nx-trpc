@@ -5,7 +5,7 @@
     "admin": "apps/admin",
     "admin-e2e": "apps/admin-e2e",
     "api": "apps/api",
-    "prisma": "libs/prisma",
-    "trpc-routers": "libs/trpc-routers"
+    "trpc-routers": "libs/trpc-routers",
+    "validation-schema": "libs/validation-schema"
   }
 }

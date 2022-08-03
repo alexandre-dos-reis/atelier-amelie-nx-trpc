@@ -1,11 +1,14 @@
-import { GridItem, Grid } from '@chakra-ui/react';
+import { GridItem, Grid, Heading } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
-import { showSearchBarAtom } from '../../store';
+import { headingHeaderAtom, showHeadingHeaderAtom, showSearchBarAtom } from '../../store';
 import { ProfileStatus } from '../profile-status';
 import { SearchBar } from '../search-bar';
 
+
 export const Header = () => {
   const [showSearchBar] = useAtom(showSearchBarAtom);
+  const [showHeadingHeader] = useAtom(showHeadingHeaderAtom);
+  const [headingHeader] = useAtom(headingHeaderAtom);
 
   return (
     <GridItem area={'header'}>
@@ -14,11 +17,16 @@ export const Header = () => {
           w="100%"
           h="100px"
           display="flex"
-          justifyContent="center"
+          justifyContent={showHeadingHeader ? 'left' : 'center'}
           alignItems="center"
           p={5}
         >
           {showSearchBar && <SearchBar />}
+          {showHeadingHeader && (
+            <Heading as={'h1'} size="lg" >
+              {headingHeader}
+            </Heading>
+          )}
         </GridItem>
         <GridItem
           w="100%"

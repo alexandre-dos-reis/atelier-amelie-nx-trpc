@@ -1,6 +1,5 @@
 import * as trpc from '@trpc/server';
-import { ArtworkRouter } from './sub-routers/artwork.router';
-import { CategoryRouter } from './sub-routers/category.router';
+import { ArtworkRouter, CategoryRouter } from './routers';
 
 export const appRouter = trpc
   .router()

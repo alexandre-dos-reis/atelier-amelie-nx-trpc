@@ -11,26 +11,28 @@ datasource db {
 }
 
 model Artwork {
-  id                  Int       @id @default(autoincrement())
+  id                  Int        @id @default(autoincrement())
   name                String
   slug                String
   description         String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
   madeAt              DateTime?
-  showInGallery       Boolean   @default(false)
-  showInPortfolio     Boolean   @default(false)
+  showInGallery       Boolean    @default(false)
+  showInPortfolio     Boolean    @default(false)
   filename            String
   watermarkedFilename String?
   designState         String?
+  categories          Category[]
 }
 
 model Category {
-  id            Int      @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name          String
   slug          String
   description   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  showInGallery Boolean  @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  showInGallery Boolean   @default(false)
+  artworks      Artwork[]
 }

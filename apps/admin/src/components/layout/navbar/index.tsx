@@ -40,7 +40,12 @@ const LinkItems: Array<LinkItemProps> = [
     external: true,
     icon: FaChartLine,
   },
-  { name: 'Oeuvres', route: routes['artworks'].url, external: false, icon: FaPalette },
+  {
+    name: 'Oeuvres',
+    route: routes['artworks'].url,
+    external: false,
+    icon: FaPalette,
+  },
   { name: 'Catégories', route: routes['artworks'].url, external: false, icon: MdCategory },
 ];
 
@@ -54,7 +59,7 @@ export const Navbar = () => {
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Flex height="100" alignItems="center" mx="8" justifyContent="space-between">
         <ChakraLink
           as={Link}
           to={routes['home'].url}
@@ -81,7 +86,6 @@ interface NavItemProps extends FlexProps {
   external: boolean;
 }
 const NavItem = ({ children, route, icon, external, ...rest }: NavItemProps) => {
-
   return (
     <ChakraLink
       to={external ? '' : route}
@@ -89,7 +93,6 @@ const NavItem = ({ children, route, icon, external, ...rest }: NavItemProps) => 
       href={external ? route : ''}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
-      onClick={/* Déclencher l'apparition de la search bar ici... */}
     >
       <Flex
         align="center"

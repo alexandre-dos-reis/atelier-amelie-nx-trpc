@@ -4,6 +4,7 @@ import { ArtworkEdit, Artworks, Home } from '../../pages';
 import { routes } from '../../utils/routes';
 
 export const Main = () => (
+
   <GridItem
     area={'main'}
     overflowY={'scroll'}
