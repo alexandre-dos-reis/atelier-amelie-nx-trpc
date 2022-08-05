@@ -14,8 +14,6 @@ export const Artworks = () => {
   if (isError) return <div>{error.message}</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  console.log(data?.artworks)
-
   return (
     <VStack spacing="24px" m={2}>
       {data?.artworks.map((a) => (

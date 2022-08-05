@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@atelier-amelie-nx-trpc/helpers": ["libs/helpers/src/index.ts"],
       "@atelier-amelie-nx-trpc/trpc-routers": ["libs/trpc-routers/src/index.ts"],
       "@atelier-amelie-nx-trpc/validation-schema": ["libs/validation-schema/src/index.ts"]
     }

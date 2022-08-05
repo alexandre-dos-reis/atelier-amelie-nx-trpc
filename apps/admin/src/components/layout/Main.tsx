@@ -1,6 +1,6 @@
 import { GridItem, useColorModeValue } from '@chakra-ui/react';
 import { Outlet, Route, Routes } from 'react-router-dom';
-import { ArtworkEdit, Artworks, Home } from '../../pages';
+import { ArtworkEdit, Artworks, Home, ArtworkEdit2 } from '../../pages';
 import { routes } from '../../utils/routes';
 
 export const Main = () => (
@@ -15,7 +15,7 @@ export const Main = () => (
       <Route path={routes['home'].url} element={<Home />} />
       <Route path={routes['artworks'].url} element={<Outlet />}>
         <Route index element={<Artworks />} />
-        <Route path={`:${routes['artworks'].params?.['id']}`} element={<ArtworkEdit />} />
+        <Route path={`:${routes['artworks'].params?.['id']}`} element={<ArtworkEdit2 />} />
       </Route>
     </Routes>
   </GridItem>

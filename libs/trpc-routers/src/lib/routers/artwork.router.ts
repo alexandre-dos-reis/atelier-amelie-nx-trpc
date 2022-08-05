@@ -18,6 +18,9 @@ export const ArtworkRouter = trpc
               },
             },
           },
+          orderBy: {
+            updatedAt: 'desc',
+          },
         }),
       };
     },
@@ -42,17 +45,26 @@ export const ArtworkRouter = trpc
   .mutation('updateOne', {
     input: updateOneSchema,
     async resolve({ input }) {
-      console.log(input);
       return {
-        ok: 'ok',
-        // artwork: await prisma.artwork.update({
-        //   where: {
-        //     id: input.id,
-        //   },
-        //   data: {
-        //     ...input,
-        //   },
-        // }),
+        artwork: await prisma.artwork.update({
+          where: {
+            id: input.id,
+          },
+          include: {
+            categories: true,
+          },
+          data: {
+            name: input.name,
+            slug: input.slug,
+            description: input.description,
+            showInGallery: input.showInGallery,
+            showInPortfolio: input.showInPortfolio,
+            madeAt: input.madeAt,
+            categories: {
+              set: input.categories.map((c) => ({ id: c.value })),
+            },
+          },
+        }),
       };
     },
   });
