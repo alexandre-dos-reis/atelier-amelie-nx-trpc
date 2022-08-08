@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const updateOneSchema = z.object({
+export const updateOrCreateOneSchema = z.object({
   id: z.number().positive().int(),
   name: z.string().min(3).max(255),
   slug: z.string().min(3).max(255),

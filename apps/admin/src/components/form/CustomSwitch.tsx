@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 import { Controller, Control, Path } from 'react-hook-form';
 
 interface InputProps<T> {
-  control: Control<T>;
+  c: Control<T>;
   label: string;
   name: Path<T>;
   gap?: number;
   bg?: string;
 }
 
-export function CustomSwitch<T>({ control, name, label, gap }: InputProps<T>) {
+export function CustomSwitch<T>({ c, name, label, gap }: InputProps<T>) {
   return (
     <Controller
       name={name}
-      control={control}
+      control={c}
       render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => (
         <FormControl isInvalid={!!error}>
           <FormLabel gap={gap}>{label}</FormLabel>

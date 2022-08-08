@@ -3,10 +3,10 @@ import { Controller, Control, Path } from 'react-hook-form';
 import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
 
 interface InputProps<T> {
-  control: Control<T>;
+  c: Control<T>;
   label: string;
   name: Path<T>;
-  isRequired?: boolean;
+  html5required?: boolean;
   type: HTMLInputTypeAttribute | 'textarea';
   onChange?: ChangeEventHandler<HTMLInputElement>;
   gap?: number;
@@ -14,10 +14,10 @@ interface InputProps<T> {
 }
 
 export function CustomInput<T>({
-  control,
+  c,
   name,
   type,
-  isRequired = false,
+  html5required = false,
   label,
   gap,
   bg = 'white',
@@ -25,29 +25,14 @@ export function CustomInput<T>({
   return (
     <Controller
       name={name}
-      control={control}
-      render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => (
-        <FormControl isInvalid={!!error} isRequired={isRequired}>
+      control={c}
+      render={({ field, fieldState: { error } }) => (
+        <FormControl isInvalid={!!error} isRequired={html5required}>
           <FormLabel gap={gap}>{label}</FormLabel>
           {type === 'textarea' ? (
-            <Textarea
-              ref={ref}
-              name={name}
-              onChange={onChange}
-              onBlur={onBlur}
-              defaultValue={value as string}
-              bg={bg}
-            />
+            <Textarea {...field} value={(field.value as string) || ''} bg={bg} />
           ) : (
-            <Input
-              type={type}
-              ref={ref}
-              name={name}
-              onChange={onChange}
-              onBlur={onBlur}
-              defaultValue={value as string}
-              bg={bg}
-            />
+            <Input type={type} {...field} value={(field.value as string) || ''} bg={bg} />
           )}
           <FormErrorMessage>{error && error.message}</FormErrorMessage>
         </FormControl>

@@ -1,4 +1,3 @@
-export * from './Artwork';
-export * from './ArtworkEdit2';
+export * from './ArtworkEdit';
 export * from './Artworks';
 export * from './Home';

@@ -1,7 +1,7 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../../utils/prisma';
-import { updateOneSchema } from '@atelier-amelie-nx-trpc/validation-schema';
+import { updateOrCreateOneSchema } from '@atelier-amelie-nx-trpc/validation-schema';
 
 export const ArtworkRouter = trpc
   .router()
@@ -43,7 +43,34 @@ export const ArtworkRouter = trpc
   })
 
   .mutation('updateOne', {
-    input: updateOneSchema,
+    input: updateOrCreateOneSchema,
+    async resolve({ input }) {
+      return {
+        artwork: await prisma.artwork.update({
+          where: {
+            id: input.id,
+          },
+          include: {
+            categories: true,
+          },
+          data: {
+            name: input.name,
+            slug: input.slug,
+            description: input.description,
+            showInGallery: input.showInGallery,
+            showInPortfolio: input.showInPortfolio,
+            madeAt: input.madeAt,
+            categories: {
+              set: input.categories.map((c) => ({ id: c.value })),
+            },
+          },
+        }),
+      };
+    },
+  })
+
+  .mutation('createOne', {
+    input: updateOrCreateOneSchema,
     async resolve({ input }) {
       return {
         artwork: await prisma.artwork.update({
