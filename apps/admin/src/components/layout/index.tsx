@@ -14,6 +14,8 @@ export const Layout = () => {
   const [, setShowHeadingHeader] = useAtom(showHeadingHeaderAtom);
   const [, setHeadingHeader] = useAtom(headingHeaderAtom);
 
+  // console.log(location.pathname);
+
   useEffect(() => {
     if (location.pathname === routes['artworks'].url) {
       setShowSearchBar(true);
@@ -24,9 +26,12 @@ export const Layout = () => {
     if (location.pathname.includes(`${routes['artworks'].url}/`)) {
       setHeadingHeader('Modifier une oeuvre');
       setShowHeadingHeader(true);
+    } else if (location.pathname === routes['artworks'].children?.['create'].url) {
+      setHeadingHeader('Créer une oeuvre');
+      setShowHeadingHeader(true);
     } else {
-      setShowHeadingHeader(false);
       setHeadingHeader('');
+      setShowHeadingHeader(false);
     }
   }, [location]);
 

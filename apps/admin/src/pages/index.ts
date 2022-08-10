@@ -1,3 +1,4 @@
-export * from './ArtworkEdit';
-export * from './Artworks';
+export * from './artworks/ArtworkEdit';
+export * from './artworks/ArtworksList';
+export * from './artworks/ArtworkCreate';
 export * from './Home';

@@ -1,1 +1,1 @@
-export * from './Artwork-list-item'
+export * from './ArtworkForm'

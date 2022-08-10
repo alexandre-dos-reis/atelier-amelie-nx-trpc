@@ -1,9 +1,7 @@
 interface IRoutes {
   [key: string]: {
     url: string;
-    params?: {
-      [key: string]: string;
-    };
+    children?: IRoutes;
   };
 }
 
@@ -13,8 +11,13 @@ export const routes: IRoutes = {
   },
   artworks: {
     url: '/artworks',
-    params: {
-      id: 'id',
+    children: {
+      id: {
+        url: ':id',
+      },
+      create: {
+        url: 'create',
+      },
     },
   },
 };

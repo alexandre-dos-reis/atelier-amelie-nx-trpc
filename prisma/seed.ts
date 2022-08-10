@@ -5,18 +5,22 @@ import slugify from 'slugify';
 const prisma = new PrismaClient();
 
 async function main() {
-  for (let i = 0; i < 5; i++) {
-    const name = faker.random.word();
+  const catsName = [
+    'Calligraphies',
+    'Enluminures',
+    'Marques-pages',
+    'Evènements',
+    'Autres techniques',
+  ];
 
-    await prisma.category.create({
-      data: {
-        name,
-        slug: slugify(name, { lower: true }),
-        description: faker.random.words(20),
-        showInGallery: faker.helpers.arrayElement([true, false]),
-      },
-    });
-  }
+  await prisma.category.createMany({
+    data: catsName.map((c) => ({
+      name: c,
+      slug: slugify(c, { lower: true }),
+      description: faker.random.words(20),
+      showInGallery: true,
+    })),
+  });
 
   const categories = await prisma.category.findMany();
 
@@ -25,7 +29,7 @@ async function main() {
 
     await prisma.artwork.create({
       data: {
-        filename: 'Manet.jpg',  
+        filename: 'Manet.jpg',
         name,
         slug: slugify(name, { lower: true }),
         description: faker.random.words(20),

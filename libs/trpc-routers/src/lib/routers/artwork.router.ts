@@ -19,7 +19,7 @@ export const ArtworkRouter = trpc
             },
           },
           orderBy: {
-            updatedAt: 'desc',
+            name: 'asc',
           },
         }),
       };
@@ -69,14 +69,31 @@ export const ArtworkRouter = trpc
     },
   })
 
+  .mutation('updateShowInGallery', {
+    input: z.object({
+      id: z.number().positive(),
+      isChecked: z.boolean(),
+    }),
+    async resolve({ input }) {
+      return await prisma.artwork.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          showInGallery: input.isChecked,
+        },
+        select: {
+          showInGallery: true,
+        },
+      });
+    },
+  })
+
   .mutation('createOne', {
     input: updateOrCreateOneSchema,
     async resolve({ input }) {
       return {
-        artwork: await prisma.artwork.update({
-          where: {
-            id: input.id,
-          },
+        artwork: await prisma.artwork.create({
           include: {
             categories: true,
           },
@@ -87,8 +104,9 @@ export const ArtworkRouter = trpc
             showInGallery: input.showInGallery,
             showInPortfolio: input.showInPortfolio,
             madeAt: input.madeAt,
+            filename: '',
             categories: {
-              set: input.categories.map((c) => ({ id: c.value })),
+              connect: input.categories.map((c) => ({ id: c.value })),
             },
           },
         }),
