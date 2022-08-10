@@ -6,6 +6,7 @@ specifiers:
   '@emotion/react': ^11.9.3
   '@emotion/styled': ^11.9.3
   '@faker-js/faker': ^7.3.0
+  '@formkit/auto-animate': 1.0.0-beta.1
   '@hookform/resolvers': ^2.9.7
   '@nrwl/cli': 14.5.1
   '@nrwl/cypress': 14.5.1
@@ -78,6 +79,7 @@ dependencies:
   '@chakra-ui/react': 2.2.4_tij2njokttso6734ktuzwjh5a4
   '@emotion/react': 11.9.3_szkdlbnthht4v3jvm76fn7u6na
   '@emotion/styled': 11.9.3_y2x62d5bbinncmisoeyv36jqse
+  '@formkit/auto-animate': 1.0.0-beta.1_react@18.2.0
   '@hookform/resolvers': 2.9.7_react-hook-form@7.34.0
   '@prisma/client': 4.1.1_prisma@4.1.1
   '@trpc/client': 9.26.2_@trpc+server@9.26.2
@@ -2496,6 +2498,20 @@ packages:
     resolution: {integrity: sha512-1W0PZezq2rxlAssoWemi9gFRD8IQxvf0FPL5Km3TOmGHFG7ib0TbFBJ0yC7D/1NsxunjNTK6WjUXV8ao/mKZ5w==}
     engines: {node: '>=14.0.0', npm: '>=6.0.0'}
     dev: true
+
+  /@formkit/auto-animate/1.0.0-beta.1_react@18.2.0:
+    resolution: {integrity: sha512-I3OWOBaPZKSJL4bsooXI8kC3q7bcgibD2oML0P/Lir6MnbvUe/0/7EH8br024juvM/Ulm9C9xGx9CJUQYrOWSA==}
+    peerDependencies:
+      react: ^16.8.0
+      vue: ^3.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      vue:
+        optional: true
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /@hookform/resolvers/2.9.7_react-hook-form@7.34.0:
     resolution: {integrity: sha512-BloehX3MOLwuFEwT4yZnmolPjVmqyn8VsSuodLfazbCIqxBHsQ4qUZsi+bvNNCduRli1AGWFrkDLGD5QoNzsoA==}

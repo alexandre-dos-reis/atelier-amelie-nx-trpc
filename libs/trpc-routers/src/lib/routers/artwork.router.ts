@@ -75,17 +75,32 @@ export const ArtworkRouter = trpc
       isChecked: z.boolean(),
     }),
     async resolve({ input }) {
-      return await prisma.artwork.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          showInGallery: input.isChecked,
-        },
-        select: {
-          showInGallery: true,
-        },
-      });
+      return {
+        artwork: await prisma.artwork.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            showInGallery: input.isChecked,
+          },
+          include: {
+            categories: true,
+          },
+        }),
+      };
+    },
+  })
+
+  .mutation('deleteOne', {
+    input: z.number(),
+    async resolve({ input }) {
+      return {
+        artwork: await prisma.artwork.delete({
+          where: {
+            id: input,
+          },
+        }),
+      };
     },
   })
 

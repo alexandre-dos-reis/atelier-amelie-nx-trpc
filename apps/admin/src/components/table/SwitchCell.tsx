@@ -1,5 +1,5 @@
 import { Switch } from '@chakra-ui/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 
 interface SwitchCellProps {
   isChecked: boolean;
@@ -10,9 +10,9 @@ export const SwitchCell = ({ isChecked, onChangeCallback }: SwitchCellProps) => 
   const [value, setValue] = useState(isChecked);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue((v) => !v);
+    setValue(!value);
     onChangeCallback(e.target.checked);
   };
 
-  return <Switch isChecked={value} onChange={handleOnChange} />;
+  return <Switch isChecked={isChecked} onChange={handleOnChange} />;
 };

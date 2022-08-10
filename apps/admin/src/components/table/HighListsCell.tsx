@@ -1,5 +1,5 @@
-import { Flex, Highlight, Tag } from '@chakra-ui/react';
-
+import { Tag } from '@chakra-ui/react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 interface TagsCellProps {
   values: { name: string; id: number }[];
 }
@@ -7,8 +7,9 @@ interface TagsCellProps {
 const colors: string[] = ['red', 'blue', 'orange', 'purple', 'green'];
 
 export const TagsCell = ({ values }: TagsCellProps) => {
+  const [animationParent] = useAutoAnimate<HTMLDivElement>();
   return (
-    <>
+    <div ref={animationParent}>
       {values.map((v) => (
         <Tag
           key={v.id}
@@ -16,8 +17,10 @@ export const TagsCell = ({ values }: TagsCellProps) => {
           colorScheme={colors[v.id % colors.length]}
           rounded={'full'}
           m="0.5"
-        >{v.name}</Tag>
+        >
+          {v.name}
+        </Tag>
       ))}
-    </>
+    </div>
   );
 };

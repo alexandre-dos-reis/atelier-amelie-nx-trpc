@@ -8,10 +8,17 @@ export const updateOrCreateOneSchema = z.object({
   madeAt: z.date().nullable().optional(),
   showInGallery: z.boolean(),
   showInPortfolio: z.boolean(),
-  categories: z.object({
-    value: z.number(),
-    label: z.string(),
-  }).array(),
+  categories: z
+    .object({
+      value: z.number(),
+      label: z.string(),
+    })
+    .array(),
 });
-
 export type updateOrCreateOneSchemaType = z.infer<typeof updateOrCreateOneSchema>;
+
+export const updateShowInGallerySchema = z.object({
+  id: z.number().positive(),
+  isChecked: z.boolean(),
+});
+export type updateShowInGallerySchemaType = z.infer<typeof updateShowInGallerySchema>;

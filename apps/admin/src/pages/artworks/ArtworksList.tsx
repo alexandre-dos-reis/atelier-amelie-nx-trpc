@@ -29,7 +29,12 @@ export const ArtworksList = () => {
   // setShowSearchBar(true);
 
   const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['artwork.getAll']);
-  const m = trpc.useMutation(['artwork.updateShowInGallery']);
+  const mutation = trpc.useMutation(['artwork.updateShowInGallery'], {
+    onSuccess: (data) => {
+      trpcContext.invalidateQueries('artwork.getAll');
+      trpcContext.invalidateQueries(['artwork.getOne', data.artwork.id]);
+    },
+  });
   const trpcContext = trpc.useContext();
 
   type Cols = {
@@ -82,17 +87,10 @@ export const ArtworksList = () => {
           <SwitchCell
             isChecked={cell.value}
             onChangeCallback={(isChecked) => {
-              m.mutateAsync(
-                {
-                  id: cell.row.original.id,
-                  isChecked,
-                },
-                {
-                  onSuccess(input) {
-                    trpcContext.invalidateQueries(['artwork.getAll']);
-                  },
-                }
-              );
+              mutation.mutate({
+                id: cell.row.original.id,
+                isChecked,
+              });
             }}
           />
         ),
@@ -116,15 +114,7 @@ export const ArtworksList = () => {
 
   return (
     <>
-      <Flex
-        justifyContent="space-between"
-        bg="white"
-        position="sticky"
-        top="0"
-        zIndex="banner"
-        p="2"
-        px="4"
-      >
+      <Flex justifyContent="space-between" bg="white" zIndex="banner" p="2" px="4">
         <Heading>Liste des oeuvres</Heading>
         <Button
           as={L}
@@ -134,9 +124,15 @@ export const ArtworksList = () => {
           Créer une oeuvre
         </Button>
       </Flex>
-      <TableContainer>
-        <Table colorScheme="facebook" size="sm" variant="striped" {...getTableProps()}>
-          <Thead>
+      <TableContainer overflowX="unset" overflowY="unset">
+        <Table
+          colorScheme="facebook"
+          size="sm"
+          variant="striped"
+          {...getTableProps()}
+          position="relative"
+        >
+          <Thead position="sticky" top="0" zIndex="docked" bg="white">
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
