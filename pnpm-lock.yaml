@@ -19,6 +19,7 @@ specifiers:
   '@nrwl/web': 14.5.1
   '@nrwl/workspace': 14.5.1
   '@prisma/client': ^4.1.1
+  '@tanstack/react-table': ^8.5.11
   '@testing-library/react': 13.3.0
   '@trpc/client': ^9.26.2
   '@trpc/react': ^9.26.2
@@ -30,7 +31,6 @@ specifiers:
   '@types/react': 18.0.15
   '@types/react-dom': 18.0.6
   '@types/react-is': 17.0.3
-  '@types/react-table': ^7.7.12
   '@types/styled-components': 5.1.25
   '@typescript-eslint/eslint-plugin': ^5.29.0
   '@typescript-eslint/parser': ^5.29.0
@@ -62,7 +62,6 @@ specifiers:
   react-query: '3'
   react-router-dom: '6'
   react-select: ^5.4.0
-  react-table: ^7.8.0
   react-test-renderer: 18.2.0
   regenerator-runtime: 0.13.7
   slugify: ^1.6.5
@@ -82,6 +81,7 @@ dependencies:
   '@formkit/auto-animate': 1.0.0-beta.1_react@18.2.0
   '@hookform/resolvers': 2.9.7_react-hook-form@7.34.0
   '@prisma/client': 4.1.1_prisma@4.1.1
+  '@tanstack/react-table': 8.5.11_biqbaboplfbrettd7655fr4n2y
   '@trpc/client': 9.26.2_@trpc+server@9.26.2
   '@trpc/react': 9.26.2_4zadt2mtfbx7275mbcwrjz2noe
   '@trpc/server': 9.26.2
@@ -100,7 +100,6 @@ dependencies:
   react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
   react-select: 5.4.0_nzjbfc7eybcehockioa7br7kbi
-  react-table: 7.8.0_react@18.2.0
   regenerator-runtime: 0.13.7
   slugify: 1.6.5
   styled-components: 5.3.5_7i5myeigehqah43i5u7wbekgba
@@ -128,7 +127,6 @@ devDependencies:
   '@types/react': 18.0.15
   '@types/react-dom': 18.0.6
   '@types/react-is': 17.0.3
-  '@types/react-table': 7.7.12
   '@types/styled-components': 5.1.25
   '@typescript-eslint/eslint-plugin': 5.31.0_5tck6ikb2mwjuz56o2rwek4l2m
   '@typescript-eslint/parser': 5.31.0_4hx5bygx4rxgd7xwyndf6ymwce
@@ -3775,6 +3773,23 @@ packages:
       - supports-color
     dev: true
 
+  /@tanstack/react-table/8.5.11_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-bIegBJ3VPUX3Z7rMnFEnTRCRgPccTsciilQA1ib/pA6M7Qq1boTNPjNjSbEHmBKytaxPrPfcUfzkZLogYtvu3g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.5.11
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.5.11:
+    resolution: {integrity: sha512-ZN61ockLaIAiiPbZfMKT2S03nbWx28OHg/nAiDnNfmN4QmAMcdwVajPn2QQwnNVGAr4jS4nbhbYzCcjq8livXQ==}
+    engines: {node: '>=12'}
+    dev: false
+
   /@testing-library/dom/8.16.0:
     resolution: {integrity: sha512-uxF4zmnLHHDlmW4l+0WDjcgLVwCvH+OVLpD8Dfp+Bjfz85prwxWGbwXgJdLtkgjD0qfOzkJF9SmA6YZPsMYX4w==}
     engines: {node: '>=12'}
@@ -4090,12 +4105,6 @@ packages:
 
   /@types/react-is/17.0.3:
     resolution: {integrity: sha512-aBTIWg1emtu95bLTLx0cpkxwGW3ueZv71nE2YFBpL8k/z5czEW8yYpOo8Dp+UUAFAtKwNaOsh/ioSeQnWlZcfw==}
-    dependencies:
-      '@types/react': 18.0.15
-    dev: true
-
-  /@types/react-table/7.7.12:
-    resolution: {integrity: sha512-bRUent+NR/WwtDGwI/BqhZ8XnHghwHw0HUKeohzB5xN3K2qKWYE5w19e7GCuOkL1CXD9Gi1HFy7TIm2AvgWUHg==}
     dependencies:
       '@types/react': 18.0.15
     dev: true
@@ -10176,14 +10185,6 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.4.0
-    dev: false
-
-  /react-table/7.8.0_react@18.2.0:
-    resolution: {integrity: sha512-hNaz4ygkZO4bESeFfnfOft73iBUj8K5oKi1EcSHPAibEydfsX2MyU6Z8KCr3mv3C9Kqqh71U+DhZkFvibbnPbA==}
-    peerDependencies:
-      react: ^16.8.3 || ^17.0.0-0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
     dev: false
 
   /react-test-renderer/18.2.0_react@18.2.0:

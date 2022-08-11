@@ -21,7 +21,7 @@ export const ArtworkEdit = () => {
 
   const updateMutation = trpc.useMutation('artwork.updateOne', {
     onSuccess: (data) => {
-      trpcContext.invalidateQueries('artwork.getAll');
+      trpcContext.queryClient.invalidateQueries('artwork.getAll');
       trpcContext.invalidateQueries(['artwork.getOne', data.artwork.id]);
       toast({
         title: 'Mise à jour réussie !',

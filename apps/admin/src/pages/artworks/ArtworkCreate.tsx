@@ -2,16 +2,20 @@ import { updateOrCreateOneSchemaType } from '@atelier-amelie-nx-trpc/validation-
 import { Progress, useToast } from '@chakra-ui/react';
 import { Artwork } from '@prisma/client';
 import { SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { ArtworkForm } from '../../components/artworks';
+import { routes } from '../../utils/routes';
 import { trpc } from '../../utils/trpc';
 
 export const ArtworkCreate = () => {
   const trpcContext = trpc.useContext();
   const toast = useToast();
+  const navigate = useNavigate();
 
   const mutation = trpc.useMutation('artwork.createOne', {
     onSuccess: (data) => {
-      trpcContext.invalidateQueries(['artwork.getAll']);
+      trpcContext.invalidateQueries('artwork.getAll');
+      navigate(routes['artworks'].url, { replace: true });
       toast({
         title: 'Création réussie !',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été créée.`,

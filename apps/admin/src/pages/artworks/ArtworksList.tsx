@@ -14,103 +14,21 @@ import {
   Button,
   Flex,
   Heading,
+  Box,
 } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
 import { searchBarTextAtom, showSearchBarAtom } from '../../store';
-import { useMemo } from 'react';
-import { useTable, useSortBy, Column } from 'react-table';
-// import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Category } from '@prisma/client';
 import { TagsCell, SwitchCell } from '../../components/table';
+import { ArtworkTable } from '../../components/artworks/ArtworkTable';
 
 export const ArtworksList = () => {
   const [searchBarText] = useAtom(searchBarTextAtom);
-  // const [, setShowSearchBar] = useAtom(showSearchBarAtom);
-  // setShowSearchBar(true);
 
-  const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['artwork.getAll']);
-  const mutation = trpc.useMutation(['artwork.updateShowInGallery'], {
-    onSuccess: (data) => {
-      trpcContext.invalidateQueries('artwork.getAll');
-      trpcContext.invalidateQueries(['artwork.getOne', data.artwork.id]);
-    },
-  });
-  const trpcContext = trpc.useContext();
-
-  type Cols = {
-    id: number;
-    updatedAt: string;
-    name: string;
-    showInGallery: boolean;
-    categories: Category[];
-  };
-
-  const dataTable = useMemo(
-    (): Cols[] =>
-      !isSuccess
-        ? []
-        : (data?.artworks.map((a) => ({
-            id: a.id,
-            name: a.name,
-            categories: a.categories,
-            showInGallery: a.showInGallery,
-            updatedAt: a.updatedAt.toLocaleDateString(),
-          })) as Cols[]),
-    [data, isSuccess]
-  );
-
-  const columns: Column<Cols>[] = useMemo(
-    () => [
-      {
-        Header: 'Modifié le',
-        accessor: 'updatedAt',
-      },
-      {
-        Header: 'Nom',
-        accessor: 'name',
-        Cell: ({ cell }) => {
-          return (
-            <Link
-              as={L}
-              to={`${routes['artworks'].url}/${cell.row.original.id}`}
-              color={'purple.800'}
-            >
-              {cell.value}
-            </Link>
-          );
-        },
-      },
-      {
-        Header: 'Publier ?',
-        accessor: 'showInGallery',
-        Cell: ({ cell }) => (
-          <SwitchCell
-            isChecked={cell.value}
-            onChangeCallback={(isChecked) => {
-              mutation.mutate({
-                id: cell.row.original.id,
-                isChecked,
-              });
-            }}
-          />
-        ),
-      },
-      {
-        Header: 'Catégories',
-        accessor: 'categories',
-        Cell: ({ cell: { value } }) => <TagsCell values={value} />,
-      },
-    ],
-    []
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
-    { columns, data: dataTable },
-    useSortBy
-  );
+  const { data, isLoading, isError, error, isSuccess, isStale } = trpc.useQuery(['artwork.getAll']);
 
   if (isError) return <div>{error.message}</div>;
-  if (isLoading) return <Progress size="md" isIndeterminate />;
 
   return (
     <>
@@ -124,37 +42,9 @@ export const ArtworksList = () => {
           Créer une oeuvre
         </Button>
       </Flex>
-      <TableContainer overflowX="unset" overflowY="unset">
-        <Table
-          colorScheme="facebook"
-          size="sm"
-          variant="striped"
-          {...getTableProps()}
-          position="relative"
-        >
-          <Thead position="sticky" top="0" zIndex="docked" bg="white">
-            {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th {...column.getHeaderProps()}>{column.render('Header')}</Th>
-                ))}
-              </Tr>
-            ))}
-          </Thead>
-          <Tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
-                  ))}
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-      </TableContainer>
+      {isLoading && <Progress size="md" isIndeterminate />}
+      {isSuccess && data.artworks.length === 0 && <Box w='full' textAlign="center" m='7'>Il n'y a aucune oeuvres pour l'instant.</Box>}
+      {isSuccess && data.artworks.length !== 0 && <ArtworkTable data={data.artworks} />}
     </>
   );
 };
