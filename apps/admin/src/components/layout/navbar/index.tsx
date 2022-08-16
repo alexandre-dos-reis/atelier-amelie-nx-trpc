@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { routes } from '../../../utils/routes';
 import {
   Flex,
@@ -7,6 +7,7 @@ import {
   Icon,
   FlexProps,
   GridItem,
+  Text,
 } from '@chakra-ui/react';
 import { AiFillStepBackward } from 'react-icons/ai';
 import { FaChartLine, FaPalette, FaHome } from 'react-icons/fa';
@@ -20,6 +21,10 @@ interface LinkItemProps {
   external: boolean;
   icon: IconType;
 }
+
+// interface LinkLabelProps {
+//   label: string;
+// }
 
 const LinkItems: Array<LinkItemProps> = [
   {
@@ -40,6 +45,7 @@ const LinkItems: Array<LinkItemProps> = [
     external: true,
     icon: FaChartLine,
   },
+  // { label: 'Galerie' },
   {
     name: 'Oeuvres',
     route: routes['artworks'].url,
@@ -63,15 +69,17 @@ export const Navbar = () => {
         <ChakraLink
           as={Link}
           to={routes['home'].url}
-          fontSize="xl"
+          fontSize="2xl"
           fontFamily="cursive"
+          textAlign="center"
+          w="full"
           style={{ textDecoration: 'none' }}
         >
-          L' Atelier d' Amélie
+          AAA
         </ChakraLink>
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} {...link}>
+      {LinkItems.map((link, i) => (
+        <NavItem key={i} {...link}>
           {link.name}
         </NavItem>
       ))}
@@ -86,6 +94,8 @@ interface NavItemProps extends FlexProps {
   external: boolean;
 }
 const NavItem = ({ children, route, icon, external, ...rest }: NavItemProps) => {
+  const location = useLocation();
+
   return (
     <ChakraLink
       to={external ? '' : route}
@@ -101,14 +111,20 @@ const NavItem = ({ children, route, icon, external, ...rest }: NavItemProps) => 
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
+        bg={location.pathname.endsWith(route) ? 'blue.400' : 'white'}
+        // _hover={{
+        //   bg: 'blue.400',
+        //   color: 'white',
+        // }}
         {...rest}
       >
-        <Icon as={icon} boxSize="5" marginEnd="3" />
-        {children}
+        <Icon
+          as={icon}
+          boxSize="5"
+          marginEnd="3"
+          color={location.pathname.endsWith(route) ? 'white' : 'gray.600'}
+        />
+        <Text color={location.pathname.endsWith(route) ? 'white' : 'gray.600'}>{children}</Text>
       </Flex>
     </ChakraLink>
   );

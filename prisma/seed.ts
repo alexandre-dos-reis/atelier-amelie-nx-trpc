@@ -14,8 +14,9 @@ async function main() {
   ];
 
   await prisma.category.createMany({
-    data: catsName.map((c) => ({
+    data: catsName.map((c, i) => ({
       name: c,
+      disposition: i + 1,
       slug: slugify(c, { lower: true }),
       description: faker.random.words(20),
       showInGallery: true,

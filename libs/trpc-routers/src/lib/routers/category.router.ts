@@ -7,8 +7,53 @@ export const CategoryRouter = trpc
 
   .query('getAll', {
     async resolve() {
+      const categories = await prisma.category.findMany({
+        select: {
+          id: true,
+          updatedAt: true,
+          name: true,
+          disposition: true,
+          showInGallery: true,
+          artworks: {
+            select: {
+              _count: true,
+            },
+          },
+        },
+        orderBy: {
+          disposition: 'asc',
+        },
+      });
       return {
-        categories: await prisma.category.findMany(),
+        categories: categories.map((c) => ({
+          id: c.id,
+          updatedAt: c.updatedAt,
+          name: c.name,
+          disposition: c.disposition,
+          showInGallery: c.showInGallery,
+          artworksLength: c.artworks.length,
+        })),
+      };
+    },
+  })
+
+  .query('getOne', {
+    input: z.number(),
+    async resolve({ input }) {
+      const category = await prisma.category.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+        select: {
+          id: true,
+          description: true,
+          name: true,
+          slug: true,
+          showInGallery: true,
+        },
+      });
+      return {
+        category,
       };
     },
   });

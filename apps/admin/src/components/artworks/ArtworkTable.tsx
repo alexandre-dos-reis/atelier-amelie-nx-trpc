@@ -1,14 +1,9 @@
-import { Link, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/react';
 import { memo, useCallback, useMemo } from 'react';
-import {
-  createColumnHelper,
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-} from '@tanstack/react-table';
+import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { Link as L } from 'react-router-dom';
 import { routes } from '../../utils/routes';
-import { SwitchCell, TagsCell } from '../table';
+import { CustomTable, SwitchCell, TagsCell } from '../table';
 import { trpc } from '../../utils/trpc';
 
 type artworkItem = {
@@ -115,32 +110,5 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return (
-    <TableContainer overflowX="unset" overflowY="unset">
-      <Table colorScheme="facebook" size="sm" variant="striped" position="relative">
-        <Thead position="sticky" top="0" zIndex="sticky" bg="white">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <Th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody>
-          {table.getRowModel().rows.map((row) => (
-            <Tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>
-              ))}
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
-  );
+  return <CustomTable table={table} />;
 };

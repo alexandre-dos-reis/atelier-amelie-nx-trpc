@@ -1,29 +1,83 @@
 import { FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { Controller, Control, Path, PathValue } from 'react-hook-form';
-import { ChangeEventHandler, HTMLInputTypeAttribute } from 'react';
-import Select, { GroupBase, OptionsOrGroups } from 'react-select';
+import Select, { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select';
+import chroma from 'chroma-js';
+import { useMemo } from 'react';
 
 interface InputProps<T> {
   c: Control<T>;
   label: string;
   name: Path<T>;
+  required?: boolean;
   options?: OptionsOrGroups<PathValue<T, Path<T>>, GroupBase<PathValue<T, Path<T>>>>;
   isMulti: boolean;
   gap?: number;
 }
 
-export function CustomSelect<T>({ c, name, isMulti, options, label, gap }: InputProps<T>) {
+export function CustomSelect<T>({
+  c,
+  name,
+  isMulti,
+  options,
+  label,
+  gap,
+  required = false,
+}: InputProps<T>) {
+  const colourOptions = useMemo(
+    () => [
+      { color: '#00B8D9' },
+      { color: '#0052CC' },
+      { color: '#5243AA' },
+      { color: '#FF5630' },
+      { color: '#FF8B00' },
+      { color: '#FFC400' },
+      { color: '#36B37E' },
+      { color: '#00875A' },
+      { color: '#253858' },
+      { color: '#666666' },
+    ],
+    []
+  );
+
   return (
     <Controller
       name={name}
       control={c}
-      render={({ field, fieldState: { error } }) => (
-        <FormControl isInvalid={!!error}>
-          <FormLabel mt={gap}>{label}</FormLabel>
-          <Select {...field} isMulti={isMulti} options={options} />
-          <FormErrorMessage>{error && error.message}</FormErrorMessage>
-        </FormControl>
-      )}
+      render={({ field, fieldState: { error } }) => {
+        const style: StylesConfig<PathValue<T, Path<T>>, typeof isMulti> = {
+          control: (styles) => ({ ...styles, backgroundColor: 'white' }),
+          multiValue: (styles, { index }) => {
+            return {
+              ...styles,
+              backgroundColor: chroma(colourOptions[index].color).alpha(0.1).css(),
+            };
+          },
+          multiValueLabel: (styles, { index }) => ({
+            ...styles,
+            color: colourOptions[index].color,
+          }),
+          multiValueRemove: (styles, { index }) => ({
+            ...styles,
+            color: colourOptions[index].color,
+            ':hover': {
+              backgroundColor: colourOptions[index].color,
+              color: 'white',
+            },
+          }),
+          container: (provided, state) => ({
+            ...provided,
+            border: !error ? provided.border : '1px solid red',
+          }),
+        };
+
+        return (
+          <FormControl isInvalid={!!error} isRequired={required}>
+            <FormLabel mt={gap}>{label}</FormLabel>
+            <Select {...field} isMulti={isMulti} options={options} styles={style} />
+            <FormErrorMessage>{error && error.message}</FormErrorMessage>
+          </FormControl>
+        );
+      }}
     />
   );
 }

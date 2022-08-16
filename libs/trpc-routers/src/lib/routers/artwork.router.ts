@@ -1,7 +1,7 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../../utils/prisma';
-import { updateOrCreateOneSchema } from '@atelier-amelie-nx-trpc/validation-schema';
+import { artwork } from '@atelier-amelie-nx-trpc/validation-schema';
 
 export const ArtworkRouter = trpc
   .router()
@@ -62,8 +62,20 @@ export const ArtworkRouter = trpc
     },
   })
 
+  .query('getCategoriesForSelect', {
+    async resolve() {
+      const categories = await prisma.category.findMany();
+      return {
+        categories: categories.map((c) => ({
+          label: c.name,
+          value: c.id,
+        })),
+      };
+    },
+  })
+
   .mutation('updateOne', {
-    input: updateOrCreateOneSchema,
+    input: artwork.updateOrCreateOneSchema,
     async resolve({ input }) {
       return {
         artwork: await prisma.artwork.update({
@@ -90,10 +102,7 @@ export const ArtworkRouter = trpc
   })
 
   .mutation('updateShowInGallery', {
-    input: z.object({
-      id: z.number().positive(),
-      isChecked: z.boolean(),
-    }),
+    input: artwork.updateShowInGallerySchema,
     async resolve({ input }) {
       return {
         artwork: await prisma.artwork.update({
@@ -125,7 +134,7 @@ export const ArtworkRouter = trpc
   })
 
   .mutation('createOne', {
-    input: updateOrCreateOneSchema,
+    input: artwork.updateOrCreateOneSchema,
     async resolve({ input }) {
       const artwork = await prisma.artwork.create({
         include: {

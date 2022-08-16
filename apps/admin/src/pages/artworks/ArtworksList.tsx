@@ -2,13 +2,10 @@ import { trpc } from '../../utils/trpc';
 import { routes } from '../../utils/routes';
 import { Link as L } from 'react-router-dom';
 import { Progress, Button, Flex, Heading, Box } from '@chakra-ui/react';
-import { useAtom } from 'jotai';
-import { searchBarTextAtom } from '../../store';
 import { ArtworkTable } from '../../components/artworks/ArtworkTable';
+import { LayoutHeaderList } from '../../components/table';
 
 export const ArtworksList = () => {
-  const [searchBarText] = useAtom(searchBarTextAtom);
-
   const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['artwork.getAll'], {
     keepPreviousData: true,
   });
@@ -17,8 +14,7 @@ export const ArtworksList = () => {
 
   return (
     <>
-      <Flex justifyContent="space-between" bg="white" zIndex="banner" p="2" px="4">
-        <Heading>Liste des oeuvres</Heading>
+      <LayoutHeaderList headingText="Liste des oeuvres">
         <Button
           as={L}
           to={routes['artworks'].children?.['create'].url as string}
@@ -26,7 +22,8 @@ export const ArtworksList = () => {
         >
           Créer une oeuvre
         </Button>
-      </Flex>
+      </LayoutHeaderList>
+
       {isLoading && <Progress size="md" isIndeterminate />}
       {isSuccess && data.artworks.length === 0 && (
         <Box w="full" textAlign="center" m="7">

@@ -1,4 +1,4 @@
-import { updateOrCreateOneSchemaType } from '@atelier-amelie-nx-trpc/validation-schema';
+import { artwork as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { useToast } from '@chakra-ui/react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,7 @@ export const ArtworkCreate = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<updateOrCreateOneSchemaType> = (data) => mutation.mutate(data);
+  const onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType> = (data) => mutation.mutate(data);
 
   return (
     <ArtworkForm
