@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Menu, MenuButton, MenuItem, MenuList } from '@chak
 
 export const ProfileStatus = () => {
   return (
-    <Box display="flex" w="full" justifyContent="space-evenly" alignItems="center">
+    <Box display="flex" w="full" justifyContent="space-evenly" alignItems="center" zIndex="overlay">
       <Menu>
         <MenuButton as={Button} bg="transparent" rightIcon={<ChevronDownIcon />}>
           amelie.gille@yahoo.fr

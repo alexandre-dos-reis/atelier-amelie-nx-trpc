@@ -1,6 +1,5 @@
 import { updateOrCreateOneSchemaType } from '@atelier-amelie-nx-trpc/validation-schema';
-import { Progress, useToast } from '@chakra-ui/react';
-import { Artwork } from '@prisma/client';
+import { useToast } from '@chakra-ui/react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ArtworkForm } from '../../components/artworks';
@@ -13,9 +12,15 @@ export const ArtworkCreate = () => {
   const navigate = useNavigate();
 
   const mutation = trpc.useMutation('artwork.createOne', {
-    onSuccess: (data) => {
-      trpcContext.invalidateQueries('artwork.getAll');
-      navigate(routes['artworks'].url, { replace: true });
+    onSuccess: async (data) => {
+      await trpcContext.cancelQuery(['artwork.getAll']);
+      const previousData = trpcContext.getQueryData(['artwork.getAll']);
+      if (previousData) {
+        trpcContext.setQueryData(['artwork.getAll'], {
+          ...previousData,
+          artworks: [data.artwork, ...previousData.artworks],
+        });
+      }
       toast({
         title: 'Création réussie !',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été créée.`,
@@ -24,6 +29,7 @@ export const ArtworkCreate = () => {
         isClosable: true,
         position: 'top',
       });
+      navigate(routes['artworks'].url, { replace: true });
     },
     onError: (data, variables) => {
       toast({
@@ -41,7 +47,7 @@ export const ArtworkCreate = () => {
 
   return (
     <ArtworkForm
-      textSubmitButton={'Créer'}
+      textSubmitButton="Créer"
       onSubmit={onSubmit}
       artwork={{
         name: '',

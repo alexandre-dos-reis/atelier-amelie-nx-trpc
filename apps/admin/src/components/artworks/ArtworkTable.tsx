@@ -1,17 +1,14 @@
 import { Link, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
-import { Category } from '@prisma/client';
-import { useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import {
   createColumnHelper,
-  ColumnDef,
   useReactTable,
   getCoreRowModel,
   flexRender,
-  CellContext,
 } from '@tanstack/react-table';
 import { Link as L } from 'react-router-dom';
 import { routes } from '../../utils/routes';
-import { SwitchCell, TagsCell, MemoedSwitchCell } from '../table';
+import { SwitchCell, TagsCell } from '../table';
 import { trpc } from '../../utils/trpc';
 
 type artworkItem = {
@@ -19,7 +16,7 @@ type artworkItem = {
   updatedAt: Date;
   name: string;
   showInGallery: boolean;
-  categories: { name: string; id: number }[];
+  categories: { label: string; value: number }[];
 };
 
 interface ArtworkTableProps {
@@ -27,26 +24,12 @@ interface ArtworkTableProps {
 }
 
 export const ArtworkTable = ({ data }: ArtworkTableProps) => {
-  const trpcContext = trpc.useContext();
-
-  const mutation = trpc.useMutation(['artwork.updateShowInGallery'], {
-    onSuccess: (data) => {
-      trpcContext.invalidateQueries('artwork.getAll');
-      trpcContext.invalidateQueries(['artwork.getOne', data.artwork.id]);
-    },
-  });
-
-  const dataTable = useMemo(() => data, [data]);
+  const dataTable = useMemo(() => data, []);
 
   const columnHelper = createColumnHelper<artworkItem>();
 
   const columns = useMemo(
     () => [
-      // columnHelper.accessor('id', {
-      //   id: 'id',
-      //   header: '#',
-      //   cell: (info) => info.getValue(),
-      // }),
       columnHelper.accessor('updatedAt', {
         header: 'Mise à jour',
         cell: (info) => info.getValue().toLocaleDateString(),
@@ -66,17 +49,56 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
       columnHelper.display({
         id: 'showInGallery',
         header: 'Publier ?',
-        cell: (props) => (
-          <MemoedSwitchCell
-            initialIsChecked={props.row.original.showInGallery}
-            onChangeCallback={(isChecked) =>
-              mutation.mutate({
-                id: props.row.original.id,
-                isChecked,
-              })
-            }
-          />
-        ),
+        cell: memo((props) => {
+          const trpcContext = trpc.useContext();
+
+          const mutation = trpc.useMutation(['artwork.updateShowInGallery'], {
+            onMutate: async (variables) => {
+              await trpcContext.cancelQuery(['artwork.getAll']);
+              const previousData = trpcContext.getQueryData(['artwork.getAll']);
+
+              if (previousData) {
+                trpcContext.setQueryData(['artwork.getAll'], {
+                  ...previousData,
+                  artworks: previousData.artworks.map((a) =>
+                    a.id === variables.id ? { ...a, showInGallery: variables.isChecked } : a
+                  ),
+                });
+              }
+
+              await trpcContext.cancelQuery(['artwork.getOne', variables.id]);
+              const previousArtwork = trpcContext.getQueryData(['artwork.getOne', variables.id]);
+
+              if (previousArtwork) {
+                trpcContext.setQueryData(['artwork.getOne', variables.id], {
+                  ...previousArtwork,
+                  showInGallery: variables.isChecked,
+                });
+              }
+
+              return { previousData };
+            },
+            onError: (err, variables, context) => {
+              if (context?.previousData) {
+                trpcContext.setQueryData(['artwork.getAll'], context.previousData);
+              }
+            },
+          });
+
+          const onChangeCallback = useCallback((isChecked: boolean) => {
+            mutation.mutateAsync({
+              id: props.row.original.id,
+              isChecked,
+            });
+          }, []);
+
+          return (
+            <SwitchCell
+              initialIsChecked={props.row.original.showInGallery}
+              onChangeCallback={onChangeCallback}
+            />
+          );
+        }),
       }),
       columnHelper.display({
         id: 'categories',
@@ -96,7 +118,7 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
   return (
     <TableContainer overflowX="unset" overflowY="unset">
       <Table colorScheme="facebook" size="sm" variant="striped" position="relative">
-        <Thead position="sticky" top="0" zIndex="docked" bg="white">
+        <Thead position="sticky" top="0" zIndex="sticky" bg="white">
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (

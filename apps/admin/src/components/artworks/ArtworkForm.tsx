@@ -1,5 +1,5 @@
 import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { trpc } from '../../utils/trpc';
 import {
   CustomInput as Input,
@@ -13,6 +13,7 @@ import {
 } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import slugify from 'slugify';
 
 interface ArtworkFormProps {
   children?: ReactNode;
@@ -33,12 +34,23 @@ export const ArtworkForm = ({
   const {
     control: c,
     handleSubmit,
+    watch,
+    setValue,
     formState: { isValid },
   } = useForm<updateOrCreateOneSchemaType>({
     resolver: zodResolver(updateOrCreateOneSchema),
     defaultValues: artwork,
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'name') {
+        setValue('slug', slugify(value.name as string, { lower: true }));
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   // UI
   const gap = 5;
@@ -51,7 +63,7 @@ export const ArtworkForm = ({
 
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
           <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
             <DatePicker c={c} name="madeAt" label="Date de création" />
@@ -59,8 +71,8 @@ export const ArtworkForm = ({
             <Switch c={c} name="showInPortfolio" label="Publier dans le portfolio ?" />
           </HStack>
           <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
-            <Input c={c} type="text" name="name" label="Nom de l'oeuvre" />
-            <Input c={c} type="text" name="slug" label="Lien dans l'url" />
+            <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
+            <Input c={c} type="text" name="slug" label="Lien dans l'url" disabled />
           </HStack>
           <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
             <Input c={c} type="textarea" name="description" label="Description" />

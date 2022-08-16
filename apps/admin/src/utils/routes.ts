@@ -20,4 +20,15 @@ export const routes: IRoutes = {
       },
     },
   },
+  categories: {
+    url: '/categories',
+    children: {
+      id: {
+        url: ':id',
+      },
+      create: {
+        url: 'create',
+      },
+    },
+  },
 };

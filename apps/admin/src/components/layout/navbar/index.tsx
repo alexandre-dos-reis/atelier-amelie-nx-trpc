@@ -46,7 +46,7 @@ const LinkItems: Array<LinkItemProps> = [
     external: false,
     icon: FaPalette,
   },
-  { name: 'Catégories', route: routes['artworks'].url, external: false, icon: MdCategory },
+  { name: 'Catégories', route: routes['categories'].url, external: false, icon: MdCategory },
 ];
 
 export const Navbar = () => {

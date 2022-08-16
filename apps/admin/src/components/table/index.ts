@@ -1,2 +1,2 @@
-export * from './HighListsCell'
-export * from './SwitchCell'
+export * from './HighListsCell';
+export * from './SwitchCell';

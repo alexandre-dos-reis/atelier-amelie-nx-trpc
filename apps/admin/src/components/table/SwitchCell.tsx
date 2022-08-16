@@ -1,5 +1,5 @@
 import { Switch } from '@chakra-ui/react';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 
 interface SwitchCellProps {
   initialIsChecked: boolean;
@@ -7,20 +7,9 @@ interface SwitchCellProps {
 }
 
 export const SwitchCell = ({ initialIsChecked, onChangeCallback }: SwitchCellProps) => {
-  const [isChecked, setIsChecked] = useState(initialIsChecked);
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChangeCallback(e.target.checked);
+  };
 
-  const memoedHandleOnChange = useCallback(() => {
-    setIsChecked((prev) => {
-      onChangeCallback(!prev);
-      return !prev;
-    });
-  }, [])
-
-  useEffect(() => {
-    setIsChecked(initialIsChecked);
-  }, [initialIsChecked]);
-
-  return <Switch isChecked={isChecked} onChange={memoedHandleOnChange} />;
+  return <Switch defaultChecked={initialIsChecked} onChange={onChange} />;
 };
-
-export const MemoedSwitchCell = memo(SwitchCell)

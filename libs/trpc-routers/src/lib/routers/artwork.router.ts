@@ -8,20 +8,28 @@ export const ArtworkRouter = trpc
 
   .query('getAll', {
     async resolve() {
-      return {
-        artworks: await prisma.artwork.findMany({
-          include: {
-            categories: {
-              select: {
-                id: true,
-                name: true,
-              },
+      const artworks = await prisma.artwork.findMany({
+        include: {
+          categories: {
+            select: {
+              id: true,
+              name: true,
             },
           },
-          orderBy: {
-            name: 'asc',
-          },
-        }),
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      });
+
+      return {
+        artworks: artworks.map((a) => ({
+          ...a,
+          categories: a.categories.map((c) => ({
+            label: c.name,
+            value: c.id,
+          })),
+        })),
       };
     },
   })
@@ -29,15 +37,27 @@ export const ArtworkRouter = trpc
   .query('getOne', {
     input: z.number(),
     async resolve({ input }) {
+      const artwork = await prisma.artwork.findUniqueOrThrow({
+        where: {
+          id: input,
+        },
+        select: {
+          id: true,
+          madeAt: true,
+          description: true,
+          name: true,
+          slug: true,
+          showInGallery: true,
+          showInPortfolio: true,
+          categories: true,
+        },
+      });
       return {
-        artwork: await prisma.artwork.findUniqueOrThrow({
-          where: {
-            id: input,
-          },
-          include: {
-            categories: true,
-          },
-        }),
+        ...artwork,
+        categories: artwork.categories.map((c) => ({
+          label: c.name,
+          value: c.id,
+        })),
       };
     },
   })
@@ -107,24 +127,31 @@ export const ArtworkRouter = trpc
   .mutation('createOne', {
     input: updateOrCreateOneSchema,
     async resolve({ input }) {
+      const artwork = await prisma.artwork.create({
+        include: {
+          categories: true,
+        },
+        data: {
+          name: input.name,
+          slug: input.slug,
+          description: input.description,
+          showInGallery: input.showInGallery,
+          showInPortfolio: input.showInPortfolio,
+          madeAt: input.madeAt,
+          filename: '',
+          categories: {
+            connect: input.categories.map((c) => ({ id: c.value })),
+          },
+        },
+      });
       return {
-        artwork: await prisma.artwork.create({
-          include: {
-            categories: true,
-          },
-          data: {
-            name: input.name,
-            slug: input.slug,
-            description: input.description,
-            showInGallery: input.showInGallery,
-            showInPortfolio: input.showInPortfolio,
-            madeAt: input.madeAt,
-            filename: '',
-            categories: {
-              connect: input.categories.map((c) => ({ id: c.value })),
-            },
-          },
-        }),
+        artwork: {
+          ...artwork,
+          categories: artwork.categories.map((c) => ({
+            label: c.name,
+            value: c.id,
+          })),
+        },
       };
     },
   });
