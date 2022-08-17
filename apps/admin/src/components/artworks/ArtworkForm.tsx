@@ -59,21 +59,28 @@ export const ArtworkForm = ({
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
-          <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
+          <Flex w="full" gap={gap} justify="center">
             <DatePicker c={c} name="madeAt" label="Date de création" />
             <Switch c={c} name="showInGallery" label="Publier dans la galerie ?" />
             <Switch c={c} name="showInPortfolio" label="Publier dans le portfolio ?" />
-          </HStack>
-          <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
             <Input c={c} type="text" name="slug" label="Lien dans l'url" disabled required />
-          </HStack>
-          <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="textarea" name="description" label="Description" />
-          </HStack>
-          <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
-            <Select c={c} isMulti label="Catégories" name="categories" options={categories} required/>
-          </HStack>
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
+            <Select
+              c={c}
+              isMulti
+              label="Catégories"
+              name="categories"
+              options={categories}
+              required
+            />
+          </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap}>
           <Button type="submit" colorScheme="blue" isDisabled={!isValid} isLoading={isLoading}>

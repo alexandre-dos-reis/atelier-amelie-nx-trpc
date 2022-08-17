@@ -8,7 +8,7 @@ interface LinkCellProps {
 
 export const LinkCell = ({ to, label }: LinkCellProps) => {
   return (
-    <Link as={L} to={to} color={'gray.700'} fontSize="medium" fontWeight="semibold">
+    <Link as={L} to={to} color={'gray.700'} fontSize="larger" fontWeight="semibold">
       {label}
     </Link>
   );

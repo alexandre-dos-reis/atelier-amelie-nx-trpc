@@ -1,8 +1,9 @@
-import { Tag } from '@chakra-ui/react';
+import { Box, HStack, Tag } from '@chakra-ui/react';
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { CustomTable, LinkCell, SwitchCell } from '../table';
 import { routes } from '../../utils/routes';
+import { DragHandleIcon } from '@chakra-ui/icons';
 
 type categoryListItem = {
   id: number;
@@ -30,13 +31,18 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
       }),
       columnHelper.accessor('disposition', {
         header: 'Disposition',
-        cell: (props) => props.getValue(),
+        cell: (props) => (
+          <HStack>
+            <DragHandleIcon cursor="grab" _active={{ cursor: 'grabbing' }} />
+            <Box>{props.getValue()}</Box>
+          </HStack>
+        ),
       }),
       columnHelper.accessor('name', {
         header: 'Nom',
         cell: (props) => (
           <LinkCell
-            to={`${routes['artworks'].url}/${props.row.original.id}`}
+            to={`${routes['categories'].url}/${props.row.original.id}`}
             label={props.row.original.name}
           />
         ),

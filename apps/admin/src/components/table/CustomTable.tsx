@@ -8,7 +8,7 @@ interface CustomTableProps<T> {
 export function CustomTable<T>({ table }: CustomTableProps<T>) {
   return (
     <TableContainer overflowX="unset" overflowY="unset">
-      <Table colorScheme="gray" size="sm" variant="striped" position="relative">
+      <Table size="sm" variant="unstyled" position="relative">
         <Thead position="sticky" top="0" zIndex="sticky" bg="white">
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
@@ -22,9 +22,9 @@ export function CustomTable<T>({ table }: CustomTableProps<T>) {
             </Tr>
           ))}
         </Thead>
-        <Tbody>
+        <Tbody bg='whiteAlpha.300'>
           {table.getRowModel().rows.map((row) => (
-            <Tr key={row.id} borderBottom='2px solid #B6B6B6'>
+            <Tr key={row.id} borderBottom='1px solid #dcdcdc'>
               {row.getVisibleCells().map((cell) => (
                 <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>
               ))}

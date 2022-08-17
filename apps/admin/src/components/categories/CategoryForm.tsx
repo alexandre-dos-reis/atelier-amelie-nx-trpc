@@ -1,7 +1,7 @@
 import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react';
 import { ReactNode, useEffect } from 'react';
 import { CustomInput as Input, CustomSwitch as Switch } from '../form';
-import { category as schema} from '@atelier-amelie-nx-trpc/validation-schema';
+import { category as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
@@ -46,20 +46,18 @@ export const CategoryForm = ({
   // UI
   const gap = 5;
 
-  // Categories options
-
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
-          <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
+          <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
-            <Input c={c} type="text" name="slug" label="Lien dans l'url" disabled />
+            <Input c={c} type="text" name="slug" label="Lien dans l'url" disabled required />
             <Switch c={c} name="showInGallery" label="Publier dans la galerie ?" />
-          </HStack>
-          <HStack w="full" spacing={gap} justifyContent="center" alignItems="center">
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="textarea" name="description" label="Description" />
-          </HStack>
+          </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap}>
           <Button type="submit" colorScheme="blue" isDisabled={!isValid} isLoading={isLoading}>
