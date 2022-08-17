@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, VStack } from '@chakra-ui/react';
 import { ReactNode, useEffect } from 'react';
 import { trpc } from '../../utils/trpc';
 import {
@@ -11,6 +11,9 @@ import { artwork as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
+import { ArrowBackIcon, CheckIcon } from '@chakra-ui/icons';
+import { Link as L } from 'react-router-dom';
+import { routes } from '../../utils/routes';
 
 interface ArtworkFormProps {
   children?: ReactNode;
@@ -83,8 +86,13 @@ export const ArtworkForm = ({
           </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap}>
-          <Button type="submit" colorScheme="blue" isDisabled={!isValid} isLoading={isLoading}>
+          <Button as={L} to={routes['artworks'].url} colorScheme="blue">
+            <ArrowBackIcon marginEnd="3" />
+            Retour
+          </Button>
+          <Button type="submit" colorScheme="green" isDisabled={!isValid} isLoading={isLoading}>
             {textSubmitButton}
+            <CheckIcon marginStart="3" />
           </Button>
           {children}
         </Flex>

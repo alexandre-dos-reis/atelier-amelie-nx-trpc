@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Progress, useToast } from '@chakra-ui/react';
 import { ArtworkForm } from '../../components/artworks';
 import { routes } from '../../utils/routes';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { DeleteBtn } from '../../components/buttons';
 
 export const ArtworkEdit = () => {
   // Params from router
@@ -111,9 +113,11 @@ export const ArtworkEdit = () => {
         onSubmit={(data) => updateMutation.mutate(data)}
         artwork={data}
       >
-        <Button colorScheme="red" onClick={() => deleteMutation.mutate(id)}>
+        {/* <Button colorScheme="red" onClick={() => deleteMutation.mutate(id)}>
           Supprimer
-        </Button>
+          <DeleteIcon marginStart="3" />
+        </Button> */}
+        <DeleteBtn onConfirm={() => console.log('ok')}/>
       </ArtworkForm>
     );
   } else {
