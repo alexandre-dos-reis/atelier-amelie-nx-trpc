@@ -1,10 +1,10 @@
 import { Tag } from '@chakra-ui/react';
+import { colourOptions } from '../../utils/colours-options';
+import chroma from 'chroma-js';
 
 interface TagsCellProps {
   values: { label: string; value: number }[];
 }
-
-const colors: string[] = ['red', 'blue', 'orange', 'purple', 'green'];
 
 export const TagsCell = ({ values }: TagsCellProps) => {
   return (
@@ -12,9 +12,9 @@ export const TagsCell = ({ values }: TagsCellProps) => {
       {values.map((v) => (
         <Tag
           key={v.value}
-          border="1px"
-          colorScheme={colors[v.value % colors.length]}
-          rounded={'full'}
+          border="0px"
+          color={chroma(colourOptions[(v.value - 1) % colourOptions.length].color).brighten(0.1).hex()}
+          bg={chroma(colourOptions[(v.value - 1) % colourOptions.length].color).alpha(0.1).hex()}
           m="0.5"
         >
           {v.label}

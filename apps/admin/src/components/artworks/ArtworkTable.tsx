@@ -1,9 +1,7 @@
-import { Link } from '@chakra-ui/react';
 import { memo, useCallback, useMemo } from 'react';
 import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
-import { Link as L } from 'react-router-dom';
 import { routes } from '../../utils/routes';
-import { CustomTable, SwitchCell, TagsCell } from '../table';
+import { CustomTable, LinkCell, SwitchCell, TagsCell } from '../table';
 import { trpc } from '../../utils/trpc';
 
 type artworkItem = {
@@ -32,13 +30,10 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
       columnHelper.accessor('name', {
         header: 'Nom',
         cell: (props) => (
-          <Link
-            as={L}
+          <LinkCell
             to={`${routes['artworks'].url}/${props.row.original.id}`}
-            color={'purple.800'}
-          >
-            {props.row.original.name}
-          </Link>
+            label={props.row.original.name}
+          />
         ),
       }),
       columnHelper.display({

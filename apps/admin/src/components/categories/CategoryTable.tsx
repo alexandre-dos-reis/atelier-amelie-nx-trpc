@@ -1,8 +1,7 @@
-import { Link, Tag } from '@chakra-ui/react';
+import { Tag } from '@chakra-ui/react';
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useMemo } from 'react';
-import { CustomTable, SwitchCell } from '../table';
-import { Link as L } from 'react-router-dom';
+import { CustomTable, LinkCell, SwitchCell } from '../table';
 import { routes } from '../../utils/routes';
 
 type categoryListItem = {
@@ -36,13 +35,10 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
       columnHelper.accessor('name', {
         header: 'Nom',
         cell: (props) => (
-          <Link
-            as={L}
-            to={`${routes['categories'].url}/${props.row.original.id}`}
-            color={'purple.800'}
-          >
-            {props.row.original.name}
-          </Link>
+          <LinkCell
+            to={`${routes['artworks'].url}/${props.row.original.id}`}
+            label={props.row.original.name}
+          />
         ),
       }),
       columnHelper.display({
@@ -59,7 +55,7 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
       columnHelper.accessor('artworksLength', {
         header: "Nombre d'oeuvres associées",
         cell: (props) => (
-          <Tag bgColor={'gray.500'} color="white" >
+          <Tag bgColor={'gray.500'} color="white">
             {props.getValue()}
           </Tag>
         ),

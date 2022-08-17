@@ -2,7 +2,7 @@ import { FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { Controller, Control, Path, PathValue } from 'react-hook-form';
 import Select, { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select';
 import chroma from 'chroma-js';
-import { useMemo } from 'react';
+import { colourOptions } from '../../utils/colours-options';
 
 interface InputProps<T> {
   c: Control<T>;
@@ -23,22 +23,6 @@ export function CustomSelect<T>({
   gap,
   required = false,
 }: InputProps<T>) {
-  const colourOptions = useMemo(
-    () => [
-      { color: '#00B8D9' },
-      { color: '#0052CC' },
-      { color: '#5243AA' },
-      { color: '#FF5630' },
-      { color: '#FF8B00' },
-      { color: '#FFC400' },
-      { color: '#36B37E' },
-      { color: '#00875A' },
-      { color: '#253858' },
-      { color: '#666666' },
-    ],
-    []
-  );
-
   return (
     <Controller
       name={name}
@@ -49,18 +33,20 @@ export function CustomSelect<T>({
           multiValue: (styles, { index }) => {
             return {
               ...styles,
-              backgroundColor: chroma(colourOptions[index].color).alpha(0.1).css(),
+              backgroundColor: chroma(colourOptions[(index) % colourOptions.length].color)
+                .alpha(0.1)
+                .css(),
             };
           },
           multiValueLabel: (styles, { index }) => ({
             ...styles,
-            color: colourOptions[index].color,
+            color: colourOptions[index % colourOptions.length].color,
           }),
           multiValueRemove: (styles, { index }) => ({
             ...styles,
-            color: colourOptions[index].color,
+            color: colourOptions[index % colourOptions.length].color,
             ':hover': {
-              backgroundColor: colourOptions[index].color,
+              backgroundColor: colourOptions[index % colourOptions.length].color,
               color: 'white',
             },
           }),
