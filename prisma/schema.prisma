@@ -31,7 +31,7 @@ model Category {
   name          String
   slug          String
   description   String?
-  disposition   Int       @unique
+  disposition   Int
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   showInGallery Boolean   @default(false)

@@ -56,4 +56,27 @@ export const CategoryRouter = trpc
         category,
       };
     },
+  })
+
+  .mutation('reOrder', {
+    input: z.array(
+      z.object({
+        id: z.number().positive(),
+        disposition: z.number().positive(),
+      })
+    ),
+    async resolve({ input }) {
+      return await Promise.all(
+        input.map((i) =>
+          prisma.category.update({
+            where: {
+              id: i.id,
+            },
+            data: {
+              disposition: i.disposition,
+            },
+          })
+        )
+      );
+    },
   });
