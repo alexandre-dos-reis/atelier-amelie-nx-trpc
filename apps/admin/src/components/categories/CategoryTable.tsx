@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { FC, useMemo, useState } from 'react';
 import { CustomTable, LinkCell, SwitchCell } from '../table';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 import { DragHandleIcon } from '@chakra-ui/icons';
 import { useDrag, useDrop } from 'react-dnd';
 import { trpc } from '../../utils/trpc';

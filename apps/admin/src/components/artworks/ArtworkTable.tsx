@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
 import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 import { CustomTable, LinkCell, SwitchCell, TagsCell } from '../table';
 import { trpc } from '../../utils/trpc';
 

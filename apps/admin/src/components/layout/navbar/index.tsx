@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { findRoute } from '../../../utils/routes';
+import { findRoute } from '../../../utils/find-route';
 import {
   Flex,
   Link as ChakraLink,
@@ -75,11 +75,11 @@ export const Navbar = () => {
       <NavLabel label="BOUTIQUE" />
       <NavItem label="Produits" icon={FaGift} route={findRoute('shop.products')} />
       <NavItem label="Images" icon={FaRegImage} route={findRoute('shop.products.images')} />
-      <NavItem label="Sous-catégories" icon={FaTags} route={findRoute('shop.subCategories')} />
+      <NavItem label="Sous-catégories" icon={FaTags} route={findRoute('shop.sub-categories')} />
       <NavItem label="Catégories" icon={FaTag} route={findRoute('shop.categories')} />
 
       <NavLabel label="VENTES" />
-      <NavItem label="Commandes" icon={FaShoppingCart} route={findRoute('categories')} />
+      <NavItem label="Commandes" icon={FaShoppingCart} route={findRoute('purchases')} />
       <NavItem
         label="Paiments Stripe"
         icon={FaEuroSign}
@@ -88,8 +88,8 @@ export const Navbar = () => {
       />
 
       <NavLabel label="PARAMÈTRES" />
-      <NavItem label="Frais de port" icon={FaTruck} route={findRoute('categories')} />
-      <NavItem label="Configuration" icon={FaCog} route={findRoute('categories')} />
+      <NavItem label="Frais de port" icon={FaTruck} route={findRoute('settings.shipping-cost')} />
+      <NavItem label="Configuration" icon={FaCog} route={findRoute('settings.config')} />
     </GridItem>
   );
 };

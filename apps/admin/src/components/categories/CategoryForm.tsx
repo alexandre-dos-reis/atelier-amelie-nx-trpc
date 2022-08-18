@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
 import { BackBtn, SubmitBtn } from '../buttons';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 
 interface CategoryFormProps {
   children?: ReactNode;
@@ -73,7 +73,7 @@ export const CategoryForm = ({
           </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap}>
-          <BackBtn to={findRoute('categories')} />
+          <BackBtn />
           <SubmitBtn
             label={textSubmitButton}
             isDisabled={!isValid || !isDirty}

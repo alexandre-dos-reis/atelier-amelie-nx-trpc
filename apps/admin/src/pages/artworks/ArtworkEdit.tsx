@@ -2,7 +2,7 @@ import { trpc } from '../../utils/trpc';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Progress, useToast, Text } from '@chakra-ui/react';
 import { ArtworkForm } from '../../components/artworks';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 import { DeleteBtn } from '../../components/buttons';
 
 export const ArtworkEdit = () => {
