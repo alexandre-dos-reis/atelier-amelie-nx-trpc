@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { Header } from './Header';
 import { Main } from './Main';
 import { Navbar } from './navbar/index';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 
 export const Layout = () => {
   const location = useLocation();

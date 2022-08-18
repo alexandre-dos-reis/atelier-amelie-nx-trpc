@@ -1,7 +1,7 @@
 import { Box, Button, Progress } from '@chakra-ui/react';
 import { trpc } from '../../utils/trpc';
 import { Link as L } from 'react-router-dom';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 import { CategoryTable } from '../../components/categories';
 import { LayoutHeaderList } from '../../components/table';
 import { DndProvider } from 'react-dnd';

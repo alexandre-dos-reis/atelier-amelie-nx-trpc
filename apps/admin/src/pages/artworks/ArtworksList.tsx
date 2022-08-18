@@ -1,5 +1,5 @@
 import { trpc } from '../../utils/trpc';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 import { Progress, Box } from '@chakra-ui/react';
 import { ArtworkTable } from '../../components/artworks/ArtworkTable';
 import { LayoutHeaderList } from '../../components/table';

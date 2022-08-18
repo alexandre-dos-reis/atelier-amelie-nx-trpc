@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ArtworkForm } from '../../components/artworks';
-import { findRoute } from '../../utils/routes';
+import { findRoute } from '../../utils/find-route';
 import { trpc } from '../../utils/trpc';
 
 export const ArtworkCreate = () => {
