@@ -1,10 +1,12 @@
-import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react';
-import { ReactNode, useEffect } from 'react';
+import { Box, Flex, VStack } from '@chakra-ui/react';
+import { ReactNode, useEffect, useState } from 'react';
 import { CustomInput as Input, CustomSwitch as Switch } from '../form';
 import { category as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
+import { BackBtn, SubmitBtn } from '../buttons';
+import { findRoute } from '../../utils/routes';
 
 interface CategoryFormProps {
   children?: ReactNode;
@@ -27,21 +29,23 @@ export const CategoryForm = ({
     handleSubmit,
     watch,
     setValue,
-    formState: { isValid },
+    formState: { isValid, isDirty },
   } = useForm<schema.updateOrCreateOneSchemaType>({
     resolver: zodResolver(schema.updateOrCreateOneSchema),
     defaultValues: category,
     mode: 'onChange',
   });
 
+  const [isLocked, setIsLocked] = useState(true);
+
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === 'name') {
+      if (isLocked && name === 'name') {
         setValue('slug', slugify(value.name as string, { lower: true }));
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [watch, isLocked, setValue]);
 
   // UI
   const gap = 5;
@@ -51,8 +55,17 @@ export const CategoryForm = ({
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
           <Flex w="full" gap={gap} justify="center">
-            <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
-            <Input c={c} type="text" name="slug" label="Lien dans l'url" disabled required />
+            <Input c={c} type="text" name="name" label="Nom de la catégorie" required />
+            <Input
+              c={c}
+              type="text"
+              name="slug"
+              label="Lien dans l'url"
+              disabled
+              required
+              isLocked={isLocked}
+              setIsLocked={setIsLocked}
+            />
             <Switch c={c} name="showInGallery" label="Publier dans la galerie ?" />
           </Flex>
           <Flex w="full" gap={gap} justify="center">
@@ -60,9 +73,12 @@ export const CategoryForm = ({
           </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap}>
-          <Button type="submit" colorScheme="blue" isDisabled={!isValid} isLoading={isLoading}>
-            {textSubmitButton}
-          </Button>
+          <BackBtn to={findRoute('categories')} />
+          <SubmitBtn
+            label={textSubmitButton}
+            isDisabled={!isValid || !isDirty}
+            isLoading={isLoading}
+          />
           {children}
         </Flex>
       </form>

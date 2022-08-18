@@ -1,9 +1,8 @@
 import { trpc } from '../../utils/trpc';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Progress, useToast } from '@chakra-ui/react';
+import { Progress, useToast, Text } from '@chakra-ui/react';
 import { ArtworkForm } from '../../components/artworks';
-import { routes } from '../../utils/routes';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { findRoute } from '../../utils/routes';
 import { DeleteBtn } from '../../components/buttons';
 
 export const ArtworkEdit = () => {
@@ -80,7 +79,7 @@ export const ArtworkEdit = () => {
       return { previousData };
     },
     onSuccess: (data) => {
-      navigate(routes['artworks'].url, { replace: true });
+      navigate(findRoute('artworks'), { replace: true });
       trpcContext.queryClient.removeQueries(['artwork.getOne', data.artwork.id], { exact: true });
       toast({
         title: 'Suppression réussie !',
@@ -113,11 +112,9 @@ export const ArtworkEdit = () => {
         onSubmit={(data) => updateMutation.mutate(data)}
         artwork={data}
       >
-        {/* <Button colorScheme="red" onClick={() => deleteMutation.mutate(id)}>
-          Supprimer
-          <DeleteIcon marginStart="3" />
-        </Button> */}
-        <DeleteBtn onConfirm={() => console.log('ok')}/>
+        <DeleteBtn onConfirm={() => deleteMutation.mutate(id)}>
+          Etes-vous sûr de vouloir supprimer l'oeuvre <Text as="b">{data.name}</Text>?
+        </DeleteBtn>
       </ArtworkForm>
     );
   } else {

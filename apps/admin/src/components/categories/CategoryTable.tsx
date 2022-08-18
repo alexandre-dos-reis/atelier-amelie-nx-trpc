@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { FC, useMemo, useState } from 'react';
 import { CustomTable, LinkCell, SwitchCell } from '../table';
-import { routes } from '../../utils/routes';
+import { findRoute } from '../../utils/routes';
 import { DragHandleIcon } from '@chakra-ui/icons';
 import { useDrag, useDrop } from 'react-dnd';
 import { trpc } from '../../utils/trpc';
@@ -75,15 +75,11 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
         header: 'Disposition',
         cell: (props) => props.getValue(),
       }),
-      columnHelper.accessor('updatedAt', {
-        header: 'Mise à jour',
-        cell: (props) => props.getValue().toLocaleDateString(),
-      }),
       columnHelper.accessor('name', {
         header: 'Nom',
         cell: (props) => (
           <LinkCell
-            to={`${routes['categories'].url}/${props.row.original.id}`}
+            to={`${findRoute('categories')}/${props.row.original.id}`}
             label={props.row.original.name}
           />
         ),

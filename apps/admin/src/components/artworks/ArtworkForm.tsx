@@ -1,5 +1,5 @@
-import { Box, Button, Flex, VStack } from '@chakra-ui/react';
-import { ReactNode, useEffect } from 'react';
+import { Box, Flex, VStack } from '@chakra-ui/react';
+import { ReactNode, useEffect, useState } from 'react';
 import { trpc } from '../../utils/trpc';
 import {
   CustomInput as Input,
@@ -11,9 +11,8 @@ import { artwork as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
-import { ArrowBackIcon, CheckIcon } from '@chakra-ui/icons';
-import { Link as L } from 'react-router-dom';
-import { routes } from '../../utils/routes';
+import { findRoute } from '../../utils/routes';
+import { BackBtn, SubmitBtn } from '../buttons';
 
 interface ArtworkFormProps {
   children?: ReactNode;
@@ -36,21 +35,23 @@ export const ArtworkForm = ({
     handleSubmit,
     watch,
     setValue,
-    formState: { isValid },
+    formState: { isValid, isDirty },
   } = useForm<schema.updateOrCreateOneSchemaType>({
     resolver: zodResolver(schema.updateOrCreateOneSchema),
     defaultValues: artwork,
     mode: 'onChange',
   });
 
+  const [isLocked, setIsLocked] = useState(true);
+
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === 'name') {
+      if (isLocked && name === 'name') {
         setValue('slug', slugify(value.name as string, { lower: true }));
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [watch, isLocked, setValue]);
 
   // UI
   const gap = 5;
@@ -69,7 +70,16 @@ export const ArtworkForm = ({
           </Flex>
           <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
-            <Input c={c} type="text" name="slug" label="Lien dans l'url" disabled required />
+            <Input
+              c={c}
+              type="text"
+              name="slug"
+              label="Lien dans l'url"
+              required
+              disabled
+              setIsLocked={setIsLocked}
+              isLocked={isLocked}
+            />
           </Flex>
           <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="textarea" name="description" label="Description" />
@@ -86,14 +96,12 @@ export const ArtworkForm = ({
           </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap}>
-          <Button as={L} to={routes['artworks'].url} colorScheme="blue">
-            <ArrowBackIcon marginEnd="3" />
-            Retour
-          </Button>
-          <Button type="submit" colorScheme="green" isDisabled={!isValid} isLoading={isLoading}>
-            {textSubmitButton}
-            <CheckIcon marginStart="3" />
-          </Button>
+          <BackBtn to={findRoute('artworks')} />
+          <SubmitBtn
+            label={textSubmitButton}
+            isDisabled={!isValid || !isDirty}
+            isLoading={isLoading}
+          />
           {children}
         </Flex>
       </form>

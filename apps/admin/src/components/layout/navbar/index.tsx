@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { routes } from '../../../utils/routes';
+import { findRoute } from '../../../utils/routes';
 import {
   Flex,
   Link as ChakraLink,
@@ -8,52 +8,25 @@ import {
   FlexProps,
   GridItem,
   Text,
+  HeadingProps,
+  Heading,
 } from '@chakra-ui/react';
 import { AiFillStepBackward } from 'react-icons/ai';
-import { FaChartLine, FaPalette, FaHome } from 'react-icons/fa';
+import {
+  FaChartLine,
+  FaPalette,
+  FaHome,
+  FaGift,
+  FaRegImage,
+  FaTags,
+  FaTag,
+  FaShoppingCart,
+  FaTruck,
+  FaCog,
+  FaEuroSign,
+} from 'react-icons/fa';
 import { MdCategory } from 'react-icons/md';
-
 import { IconType } from 'react-icons';
-
-interface LinkItemProps {
-  name: string;
-  route: string;
-  external: boolean;
-  icon: IconType;
-}
-
-// interface LinkLabelProps {
-//   label: string;
-// }
-
-const LinkItems: Array<LinkItemProps> = [
-  {
-    name: 'Accueil',
-    route: routes['home'].url,
-    external: false,
-    icon: FaHome,
-  },
-  {
-    name: 'Retour vers le site',
-    route: 'https://atelier-amelie.fr',
-    external: true,
-    icon: AiFillStepBackward,
-  },
-  {
-    name: 'Statistiques',
-    route: 'https://plausible.io/plausible.io',
-    external: true,
-    icon: FaChartLine,
-  },
-  // { label: 'Galerie' },
-  {
-    name: 'Oeuvres',
-    route: routes['artworks'].url,
-    external: false,
-    icon: FaPalette,
-  },
-  { name: 'Catégories', route: routes['categories'].url, external: false, icon: MdCategory },
-];
 
 export const Navbar = () => {
   return (
@@ -64,37 +37,71 @@ export const Navbar = () => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      overflowY="auto"
     >
       <Flex height="100" alignItems="center" mx="8" justifyContent="space-between">
         <ChakraLink
           as={Link}
-          to={routes['home'].url}
+          to={findRoute('home')}
           fontSize="2xl"
           fontFamily="cursive"
           textAlign="center"
           w="full"
           style={{ textDecoration: 'none' }}
         >
-          AAA
+          A.A.A.
         </ChakraLink>
       </Flex>
-      {LinkItems.map((link, i) => (
-        <NavItem key={i} {...link}>
-          {link.name}
-        </NavItem>
-      ))}
+
+      <NavItem label="Accueil" icon={FaHome} route={findRoute('home')} />
+      <NavItem
+        label="Retour vers le site"
+        icon={AiFillStepBackward}
+        route="https://atelier-amelie.fr"
+        external
+      />
+
+      <NavItem
+        label="Statistiques"
+        icon={FaChartLine}
+        route="https://plausible.io/plausible.io"
+        external
+      />
+
+      <NavLabel label="GALERIE" />
+      <NavItem label="Oeuvres" icon={FaPalette} route={findRoute('artworks')} />
+      <NavItem label="Catégories" icon={MdCategory} route={findRoute('categories')} />
+
+      <NavLabel label="BOUTIQUE" />
+      <NavItem label="Produits" icon={FaGift} route={findRoute('shop.products')} />
+      <NavItem label="Images" icon={FaRegImage} route={findRoute('shop.products.images')} />
+      <NavItem label="Sous-catégories" icon={FaTags} route={findRoute('shop.subCategories')} />
+      <NavItem label="Catégories" icon={FaTag} route={findRoute('shop.categories')} />
+
+      <NavLabel label="VENTES" />
+      <NavItem label="Commandes" icon={FaShoppingCart} route={findRoute('categories')} />
+      <NavItem
+        label="Paiments Stripe"
+        icon={FaEuroSign}
+        route="https://dashboard.stripe.com/test/payments?status%5B%5D=successful"
+        external
+      />
+
+      <NavLabel label="PARAMÈTRES" />
+      <NavItem label="Frais de port" icon={FaTruck} route={findRoute('categories')} />
+      <NavItem label="Configuration" icon={FaCog} route={findRoute('categories')} />
     </GridItem>
   );
 };
 
 interface NavItemProps extends FlexProps {
-  children: string;
+  label: string;
   route: string;
   icon: IconType;
-  external: boolean;
+  external?: boolean;
 }
-const NavItem = ({ children, route, icon, external, ...rest }: NavItemProps) => {
-  const location = useLocation();
+const NavItem = ({ label, route, icon, external = false, ...rest }: NavItemProps) => {
+  const { pathname } = useLocation();
 
   return (
     <ChakraLink
@@ -106,26 +113,32 @@ const NavItem = ({ children, route, icon, external, ...rest }: NavItemProps) => 
     >
       <Flex
         align="center"
-        p="2"
+        p="1.5"
         mx="4"
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        bg={location.pathname.endsWith(route) ? 'blue.400' : 'white'}
-        // _hover={{
-        //   bg: 'blue.400',
-        //   color: 'white',
-        // }}
+        fontSize="sm"
+        // bg={location.pathname.endsWith(route) ? 'blue.400' : 'white'}
         {...rest}
       >
         <Icon
           as={icon}
           boxSize="5"
           marginEnd="3"
-          color={location.pathname.endsWith(route) ? 'white' : 'gray.600'}
+          color={pathname === route ? 'blue.400' : 'gray.600'}
         />
-        <Text color={location.pathname.endsWith(route) ? 'white' : 'gray.600'}>{children}</Text>
+        <Text color={pathname === route ? 'blue.400' : 'gray.600'}>{label}</Text>
       </Flex>
     </ChakraLink>
   );
 };
+
+interface NavLabelProps extends HeadingProps {
+  label: string;
+}
+const NavLabel = ({ label }: NavLabelProps) => (
+  <Heading as="h2" size="xs" color="gray.400" p="1.5" mx="4" marginTop="4">
+    {label}
+  </Heading>
+);

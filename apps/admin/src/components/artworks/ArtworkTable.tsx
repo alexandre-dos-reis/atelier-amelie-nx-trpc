@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react';
 import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
-import { routes } from '../../utils/routes';
+import { findRoute } from '../../utils/routes';
 import { CustomTable, LinkCell, SwitchCell, TagsCell } from '../table';
 import { trpc } from '../../utils/trpc';
 
@@ -31,7 +31,7 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
         header: 'Nom',
         cell: (props) => (
           <LinkCell
-            to={`${routes['artworks'].url}/${props.row.original.id}`}
+            to={`${findRoute('artworks')}/${props.row.original.id}`}
             label={props.row.original.name}
           />
         ),

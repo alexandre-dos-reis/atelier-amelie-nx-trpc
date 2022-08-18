@@ -1,13 +1,18 @@
 import { GridItem, useColorModeValue } from '@chakra-ui/react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import {
+  Home,
   ArtworkEdit,
   ArtworksList,
   ArtworkCreate,
-  Home,
   CategoriesList,
   CategoryEdit,
   CategoryCreate,
+  ProductsList,
+  ProductCreate,
+  ProductsImagesList,
+  ShopCatsList,
+  ShopSubCatsList,
 } from '../../pages';
 import { routes } from '../../utils/routes';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -38,6 +43,25 @@ export const Main = () => {
             path={routes['categories'].children?.['create'].url}
             element={<CategoryCreate />}
           />
+        </Route>
+        <Route path={routes['shop'].url}>
+          <Route path={routes['shop'].children?.['products'].url} element={<Outlet />}>
+            <Route index element={<ProductsList />} />
+            <Route
+              path={routes['shop'].children?.['products'].children?.['id'].url}
+              element={<ProductsImagesList />}
+            />
+            <Route
+              path={routes['shop'].children?.['products'].children?.['create'].url}
+              element={<ProductCreate />}
+            />
+          </Route>
+          <Route path={routes['shop'].children?.['subCategories'].url} element={<Outlet />}>
+            <Route index element={<ShopSubCatsList />} />
+          </Route>
+          <Route path={routes['shop'].children?.['categories'].url} element={<Outlet />}>
+            <Route index element={<ShopCatsList />} />
+          </Route>
         </Route>
       </Routes>
     </GridItem>

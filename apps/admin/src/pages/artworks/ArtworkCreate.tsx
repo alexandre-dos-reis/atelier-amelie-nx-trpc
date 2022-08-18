@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ArtworkForm } from '../../components/artworks';
-import { routes } from '../../utils/routes';
+import { findRoute } from '../../utils/routes';
 import { trpc } from '../../utils/trpc';
 
 export const ArtworkCreate = () => {
@@ -29,7 +29,7 @@ export const ArtworkCreate = () => {
         isClosable: true,
         position: 'top',
       });
-      navigate(routes['artworks'].url, { replace: true });
+      navigate(findRoute('artworks'), { replace: true });
     },
     onError: (data, variables) => {
       toast({

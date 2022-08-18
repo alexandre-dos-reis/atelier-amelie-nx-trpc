@@ -2,6 +2,7 @@ import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../../utils/prisma';
 import { artwork } from '@atelier-amelie-nx-trpc/validation-schema';
+import { ucFirst } from '@atelier-amelie-nx-trpc/helpers';
 
 export const ArtworkRouter = trpc
   .router()
@@ -86,7 +87,7 @@ export const ArtworkRouter = trpc
             categories: true,
           },
           data: {
-            name: input.name,
+            name: ucFirst(input.name),
             slug: input.slug,
             description: input.description,
             showInGallery: input.showInGallery,
@@ -141,7 +142,7 @@ export const ArtworkRouter = trpc
           categories: true,
         },
         data: {
-          name: input.name,
+          name: ucFirst(input.name),
           slug: input.slug,
           description: input.description,
           showInGallery: input.showInGallery,
@@ -153,6 +154,7 @@ export const ArtworkRouter = trpc
           },
         },
       });
+      console.log({artwork})
       return {
         artwork: {
           ...artwork,

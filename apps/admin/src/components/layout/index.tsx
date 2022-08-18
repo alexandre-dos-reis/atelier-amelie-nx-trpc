@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { Header } from './Header';
 import { Main } from './Main';
 import { Navbar } from './navbar/index';
-import { routes } from '../../utils/routes';
+import { findRoute } from '../../utils/routes';
 
 export const Layout = () => {
   const location = useLocation();
@@ -17,16 +17,16 @@ export const Layout = () => {
   // console.log(location.pathname);
 
   useEffect(() => {
-    if (location.pathname === routes['artworks'].url) {
+    if (location.pathname === findRoute('artworks')) {
       setShowSearchBar(true);
     } else {
       setShowSearchBar(false);
     }
 
-    if (location.pathname.includes(`${routes['artworks'].url}/`)) {
+    if (location.pathname.includes(`${findRoute('artworks')}/`)) {
       setHeadingHeader('Modifier une oeuvre');
       setShowHeadingHeader(true);
-    } else if (location.pathname === routes['artworks'].children?.['create'].url) {
+    } else if (location.pathname === findRoute('artworks.create')) {
       setHeadingHeader('Créer une oeuvre');
       setShowHeadingHeader(true);
     } else {

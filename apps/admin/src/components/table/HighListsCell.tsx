@@ -1,4 +1,4 @@
-import { Tag } from '@chakra-ui/react';
+import { Flex, Tag } from '@chakra-ui/react';
 import { colourOptions } from '../../utils/colours-options';
 import chroma from 'chroma-js';
 
@@ -8,7 +8,7 @@ interface TagsCellProps {
 
 export const TagsCell = ({ values }: TagsCellProps) => {
   return (
-    <div>
+    <Flex wrap={'wrap'}>
       {values.map((v) => (
         <Tag
           key={v.value}
@@ -20,6 +20,6 @@ export const TagsCell = ({ values }: TagsCellProps) => {
           {v.label}
         </Tag>
       ))}
-    </div>
+    </Flex>
   );
 };
