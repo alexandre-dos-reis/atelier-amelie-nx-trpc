@@ -11,7 +11,6 @@ import { artwork as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
-import { findRoute } from '../../utils/find-route';
 import { BackBtn, SubmitBtn } from '../buttons';
 
 interface ArtworkFormProps {
@@ -95,7 +94,7 @@ export const ArtworkForm = ({
             />
           </Flex>
         </VStack>
-        <Flex justifyContent="space-between" mt={gap}>
+        <Flex justifyContent="space-between" mt={gap + 5}>
           <BackBtn />
           <SubmitBtn
             label={textSubmitButton}

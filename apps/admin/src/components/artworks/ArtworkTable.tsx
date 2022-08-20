@@ -29,12 +29,14 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
       }),
       columnHelper.accessor('name', {
         header: 'Nom',
-        cell: (props) => (
-          <LinkCell
-            to={`${findRoute('artworks')}/${props.row.original.id}`}
-            label={props.row.original.name}
-          />
-        ),
+        cell: (props) => {
+          const artwork = props.row.original;
+          return (
+            <LinkCell to={findRoute('artworks.edit', artwork.id)} fontSize="md">
+              {artwork.name}
+            </LinkCell>
+          );
+        },
       }),
       columnHelper.display({
         id: 'showInGallery',

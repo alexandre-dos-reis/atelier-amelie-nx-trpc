@@ -1,4 +1,4 @@
-import { Switch } from '@chakra-ui/react';
+import { Flex, Switch } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 
 interface SwitchCellProps {
@@ -11,5 +11,5 @@ export const SwitchCell = ({ initialIsChecked, onChangeCallback }: SwitchCellPro
     onChangeCallback(e.target.checked);
   };
 
-  return <Switch defaultChecked={initialIsChecked} onChange={onChange} />;
+  return <Flex align='center' justify='center'><Switch defaultChecked={initialIsChecked} onChange={onChange} /></Flex>;
 };

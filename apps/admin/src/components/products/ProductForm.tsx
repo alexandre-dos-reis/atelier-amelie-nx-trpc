@@ -1,28 +1,28 @@
 import { Box, Flex, VStack } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
-import { CustomInput as Input, CustomSwitch as Switch } from '../form';
-import { category as schema } from '@atelier-amelie-nx-trpc/validation-schema';
+import { trpc } from '../../utils/trpc';
+import { CustomInput as Input, CustomSelect as Select, CustomSwitch as Switch } from '../form';
+import { product as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import slugify from 'slugify';
 import { BackBtn, SubmitBtn } from '../buttons';
-import { findRoute } from '../../utils/find-route';
 
-interface CategoryFormProps {
+interface ProductFormProps {
   children?: ReactNode;
-  category: schema.updateOrCreateOneSchemaType;
+  product: schema.updateOrCreateOneSchemaType;
   onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType>;
   textSubmitButton: string;
   isLoading?: boolean;
 }
 
-export const CategoryForm = ({
-  category,
+export const ProductForm = ({
+  product,
   onSubmit,
   textSubmitButton,
   isLoading = false,
   children,
-}: CategoryFormProps) => {
+}: ProductFormProps) => {
   // Form
   const {
     control: c,
@@ -32,7 +32,7 @@ export const CategoryForm = ({
     formState: { isValid, isDirty },
   } = useForm<schema.updateOrCreateOneSchemaType>({
     resolver: zodResolver(schema.updateOrCreateOneSchema),
-    defaultValues: category,
+    defaultValues: product,
     mode: 'onChange',
   });
 
@@ -50,26 +50,41 @@ export const CategoryForm = ({
   // UI
   const gap = 5;
 
+  const shopCategories = trpc.useQuery(['product.getAllCategories']).data?.shopCategories;
+
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
           <Flex w="full" gap={gap} justify="center">
-            <Input c={c} type="text" name="name" label="Nom de la catégorie" required />
+            <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
             <Input
               c={c}
               type="text"
               name="slug"
               label="Lien dans l'url"
-              disabled
               required
-              isLocked={isLocked}
+              disabled
               setIsLocked={setIsLocked}
+              isLocked={isLocked}
             />
-            <Switch c={c} name="showInGallery" label="Publier dans la galerie ?" />
           </Flex>
           <Flex w="full" gap={gap} justify="center">
-            <Input c={c} type="textarea" name="description" label="Description" />
+            <Input c={c} type="textarea" name="description" label="Description" required />
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
+            <Select c={c} label="Catégorie" name="shopCategory" options={shopCategories} required />
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
+            <Input c={c} type="number" name="height" label="Hauteur en millimètres" />
+            <Input c={c} type="number" name="width" label="Largeur en millimètres" />
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
+            <Input c={c} type="number" name="price" label="Prix" required />
+            <Input c={c} type="number" name="stock" label="Stock" required />
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
+            <Switch c={c} name="forSale" label="En vente ?" />
           </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap + 5}>

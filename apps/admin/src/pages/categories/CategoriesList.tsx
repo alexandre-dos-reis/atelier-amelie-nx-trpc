@@ -6,6 +6,7 @@ import { CategoryTable } from '../../components/categories';
 import { LayoutHeaderList } from '../../components/table';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { CreateBtn } from '../../components/buttons';
 
 export const CategoriesList = () => {
   const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['category.getAll'], {
@@ -17,9 +18,7 @@ export const CategoriesList = () => {
   return (
     <>
       <LayoutHeaderList headingText="Liste des catégories">
-        <Button as={L} to={findRoute('categories.create')} colorScheme="blue">
-          Créer une catégorie
-        </Button>
+        <CreateBtn label="Créer une catégorie" to={findRoute('categories.create')} />
       </LayoutHeaderList>
 
       {isLoading && <Progress size="md" isIndeterminate />}

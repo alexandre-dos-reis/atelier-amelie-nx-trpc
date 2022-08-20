@@ -64,9 +64,7 @@ const DraggableRow: FC<{
 };
 
 export const CategoryTable = ({ data }: CategoryTableProps) => {
-  // const dataTable = useMemo(() => data, []);
   const [dataTable, setData] = useState<categoryListItem[]>(data);
-
   const columnHelper = createColumnHelper<categoryListItem>();
 
   const columns = useMemo(
@@ -77,12 +75,12 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
       }),
       columnHelper.accessor('name', {
         header: 'Nom',
-        cell: (props) => (
-          <LinkCell
-            to={`${findRoute('categories')}/${props.row.original.id}`}
-            label={props.row.original.name}
-          />
-        ),
+        cell: (props) => {
+          const category = props.row.original;
+          return (
+            <LinkCell to={findRoute('categories.edit', category.id)}>{category.name}</LinkCell>
+          );
+        },
       }),
       columnHelper.display({
         id: 'showInGallery',
@@ -94,7 +92,6 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
           />
         ),
       }),
-
       columnHelper.accessor('artworksLength', {
         header: "Nombre d'oeuvres associées",
         cell: (props) => (

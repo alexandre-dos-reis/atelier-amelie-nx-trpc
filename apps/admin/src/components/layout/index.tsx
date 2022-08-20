@@ -14,8 +14,6 @@ export const Layout = () => {
   const [, setShowHeadingHeader] = useAtom(showHeadingHeaderAtom);
   const [, setHeadingHeader] = useAtom(headingHeaderAtom);
 
-  // console.log(location.pathname);
-
   useEffect(() => {
     if (location.pathname === findRoute('artworks')) {
       setShowSearchBar(true);

@@ -10,14 +10,14 @@ interface InputProps<T> {
   name: Path<T>;
   required?: boolean;
   options?: OptionsOrGroups<PathValue<T, Path<T>>, GroupBase<PathValue<T, Path<T>>>>;
-  isMulti: boolean;
+  isMulti?: boolean;
   gap?: number;
 }
 
 export function CustomSelect<T>({
   c,
   name,
-  isMulti,
+  isMulti = false,
   options,
   label,
   gap,
