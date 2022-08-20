@@ -1,4 +1,4 @@
-import { Box, Flex, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, VStack } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { trpc } from '../../utils/trpc';
 import { CustomInput as Input, CustomSelect as Select, CustomSwitch as Switch } from '../form';
@@ -57,7 +57,7 @@ export const ProductForm = ({
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
           <Flex w="full" gap={gap} justify="center">
-            <Input c={c} type="text" name="name" label="Nom de l'oeuvre" required />
+            <Input c={c} type="text" name="name" label="Nom du produit" required />
             <Input
               c={c}
               type="text"

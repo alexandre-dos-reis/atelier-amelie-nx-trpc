@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { findRoute } from '../../../utils/find-route';
+import { findRoute } from '../../utils/find-route';
 import {
   Flex,
   Link as ChakraLink,

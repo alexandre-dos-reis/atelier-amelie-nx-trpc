@@ -51,7 +51,6 @@ specifiers:
   express: ^4.18.1
   framer-motion: ^6.5.1
   jest: 27.5.1
-  jotai: ^1.7.6
   nx: 14.5.1
   prettier: ^2.6.2
   prisma: ^4.1.1
@@ -76,6 +75,7 @@ specifiers:
   tslib: ^2.3.0
   typescript: ~4.7.2
   zod: ^3.17.10
+  zustand: ^4.1.0
 
 dependencies:
   '@chakra-ui/icons': 2.0.4_yvhl5ql2jypczm6naccxme2hbi
@@ -94,7 +94,6 @@ dependencies:
   cors: 2.8.5
   express: 4.18.1
   framer-motion: 6.5.1_biqbaboplfbrettd7655fr4n2y
-  jotai: 1.7.6_bnqxqtdeyk3w4keay5yh2a3wni
   prisma: 4.1.1
   react: 18.2.0
   react-date-picker: 8.4.0_biqbaboplfbrettd7655fr4n2y
@@ -113,6 +112,7 @@ dependencies:
   superjson: 1.9.1
   tslib: 2.4.0
   zod: 3.17.10
+  zustand: 4.1.0_react@18.2.0
 
 devDependencies:
   '@faker-js/faker': 7.3.0
@@ -8315,45 +8315,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /jotai/1.7.6_bnqxqtdeyk3w4keay5yh2a3wni:
-    resolution: {integrity: sha512-D3R5f6OvwUPUyTPQY3wGP800nb6bDEOl/mqftjxg3gcHVITeFcldr9W9IBK+gXsow357vhNXuci/LfD+rl92PA==}
-    engines: {node: '>=12.7.0'}
-    peerDependencies:
-      '@babel/core': '*'
-      '@babel/template': '*'
-      '@urql/core': '*'
-      immer: '*'
-      optics-ts: '*'
-      react: '>=16.8'
-      react-query: '*'
-      valtio: '*'
-      wonka: '*'
-      xstate: '*'
-    peerDependenciesMeta:
-      '@babel/core':
-        optional: true
-      '@babel/template':
-        optional: true
-      '@urql/core':
-        optional: true
-      immer:
-        optional: true
-      optics-ts:
-        optional: true
-      react-query:
-        optional: true
-      valtio:
-        optional: true
-      wonka:
-        optional: true
-      xstate:
-        optional: true
-    dependencies:
-      '@babel/core': 7.18.9
-      react: 18.2.0
-      react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
-    dev: false
-
   /js-sha3/0.8.0:
     resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
     dev: false
@@ -11690,6 +11651,14 @@ packages:
       tslib: 2.4.0
     dev: false
 
+  /use-sync-external-store/1.2.0_react@18.2.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
@@ -12109,4 +12078,20 @@ packages:
 
   /zod/3.17.10:
     resolution: {integrity: sha512-IHXnQYQuOOOL/XgHhgl8YjNxBHi3xX0mVcHmqsvJgcxKkEczPshoWdxqyFwsARpf41E0v9U95WUROqsHHxt0UQ==}
+    dev: false
+
+  /zustand/4.1.0_react@18.2.0:
+    resolution: {integrity: sha512-ba39yDM90wFHiCO5AuoP2Tr1vSY5Eggduk0ou91mWL/qKnz2sBq8AcdFoticOftt7AfIHRBENI7WfjkUrqB3vA==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false

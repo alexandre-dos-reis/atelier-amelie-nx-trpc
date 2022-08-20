@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+// import { atom } from 'jotai';
 
-export const searchBarTextAtom = atom('');
-export const showSearchBarAtom = atom(false);
+// export const searchBarTextAtom = atom('');
+// export const showSearchBarAtom = atom(false);

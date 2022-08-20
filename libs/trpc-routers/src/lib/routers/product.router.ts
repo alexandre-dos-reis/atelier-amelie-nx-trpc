@@ -83,12 +83,23 @@ export const ProductRouter = trpc
           },
         },
       });
+
+      let parentCategoryName = '';
+      let childrenCategoryName = '';
+
+      if (product.shopCategory) {
+        childrenCategoryName = product.shopCategory.name;
+        if (product.shopCategory.parentCategory) {
+          parentCategoryName = product.shopCategory.parentCategory.name;
+        }
+      }
+
       return {
         product: {
           ...product,
           shopCategory: {
-            label:  `${product.shopCategory.parentCategory.name ?? '-'} | ${product.shopCategory.name ?? '-'}`,
-            value: product.shopCategory.id ?? 0
+            label: `${parentCategoryName} | ${childrenCategoryName}`,
+            value: product.shopCategory.id ?? 0,
           },
         },
       };

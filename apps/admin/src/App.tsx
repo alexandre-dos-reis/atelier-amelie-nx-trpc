@@ -1,8 +1,8 @@
 import { trpc } from './utils/trpc';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ChakraProvider, Grid } from '@chakra-ui/react';
-import { BrowserRouter, useLocation } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
+import { BrowserRouter } from 'react-router-dom';
 import { Layout } from './components/layout';
 import superjson from 'superjson';
 

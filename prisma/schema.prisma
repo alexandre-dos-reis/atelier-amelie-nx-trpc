@@ -64,3 +64,16 @@ model ShopCategory {
   parentCategoryId Int?
   Product          Product[]
 }
+
+model ShippingCost {
+  id            Int @id @default(autoincrement())
+  max           Int
+  weightCost    Int
+  insuranceCost Int
+}
+
+model AppVariable {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
+}
