@@ -6,9 +6,9 @@ import { findRoute } from '../../../utils/find-route';
 import { trpc } from '../../../utils/trpc';
 
 export const ProductsList = () => {
-  const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['product.getAll'], {
-    keepPreviousData: true,
-  });
+  const { data, isLoading, isError, error, isSuccess } = trpc.useQuery([
+    'product.getAll',
+  ]);
 
   if (isError) return <div>{error.message}</div>;
 
@@ -23,7 +23,9 @@ export const ProductsList = () => {
           Il n'y a aucune oeuvres pour l'instant.
         </Box>
       )}
-      {isSuccess && data.products.length !== 0 && <ProductTable data={data.products} />}
+      {isSuccess && data.products.length !== 0 && (
+        <ProductTable data={data.products} />
+      )}
     </>
   );
 };

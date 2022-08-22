@@ -1,14 +1,10 @@
 import { GridItem, Grid, Heading } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { useAtom } from 'jotai';
-import { headingHeaderAtom, showHeadingHeaderAtom, showSearchBarAtom } from '../../store';
 import { ProfileStatus } from '../profile-status';
 import { SearchBar } from '../search-bar';
 
 export const Header = () => {
-  const [showSearchBar] = useAtom(showSearchBarAtom);
-  const [showHeadingHeader] = useAtom(showHeadingHeaderAtom);
-  const [headingHeader] = useAtom(headingHeaderAtom);
+
   const [animationParent] = useAutoAnimate<HTMLDivElement>();
 
   return (
@@ -18,16 +14,16 @@ export const Header = () => {
           w="100%"
           h="100px"
           display="flex"
-          justifyContent={showHeadingHeader ? 'left' : 'center'}
+          justifyContent={'center'}
           alignItems="center"
           p={5}
         >
-          {showSearchBar && <SearchBar />}
+          {/* {showSearchBar && <SearchBar />}
           {showHeadingHeader && (
             <Heading as={'h1'} size="lg">
               {headingHeader}
             </Heading>
-          )}
+          )} */}
         </GridItem>
         <GridItem
           w="100%"

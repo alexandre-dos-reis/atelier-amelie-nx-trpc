@@ -50,7 +50,12 @@ export const ProductForm = ({
   // UI
   const gap = 5;
 
-  const shopCategories = trpc.useQuery(['product.getAllCategories']).data?.shopCategories;
+  const shopCategories = trpc
+    .useQuery(['product.getAllCategories'])
+    .data?.shopCategories.map((sc) => ({
+      label: sc.parentCategory?.name + ' | ' + sc.name,
+      value: sc.id,
+    }));
 
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>

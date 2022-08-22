@@ -1,4 +1,5 @@
-import { productsListSchema } from '@atelier-amelie-nx-trpc/validation-schema';
+import { ucFirst } from '@atelier-amelie-nx-trpc/helpers';
+import { productsListSchema, product } from '@atelier-amelie-nx-trpc/validation-schema';
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../../utils/prisma';
@@ -48,11 +49,13 @@ export const ProductRouter = trpc
   })
 
   .query('getOne', {
-    input: z.number(),
+    input: z.object({
+      id: z.number(),
+    }),
     async resolve({ input }) {
       const product = await prisma.product.findFirstOrThrow({
         where: {
-          id: input,
+          id: input.id,
         },
         select: {
           id: true,
@@ -70,6 +73,7 @@ export const ProductRouter = trpc
               name: true,
             },
           },
+          artworkId: true,
           shopCategory: {
             select: {
               id: true,
@@ -77,6 +81,7 @@ export const ProductRouter = trpc
               parentCategory: {
                 select: {
                   name: true,
+                  id: true,
                 },
               },
             },
@@ -84,31 +89,15 @@ export const ProductRouter = trpc
         },
       });
 
-      let parentCategoryName = '';
-      let childrenCategoryName = '';
-
-      if (product.shopCategory) {
-        childrenCategoryName = product.shopCategory.name;
-        if (product.shopCategory.parentCategory) {
-          parentCategoryName = product.shopCategory.parentCategory.name;
-        }
-      }
-
       return {
-        product: {
-          ...product,
-          shopCategory: {
-            label: `${parentCategoryName} | ${childrenCategoryName}`,
-            value: product.shopCategory.id ?? 0,
-          },
-        },
+        product,
       };
     },
   })
 
   .query('getAllCategories', {
     async resolve() {
-      const categories = await prisma.shopCategory.findMany({
+      const shopCategories = await prisma.shopCategory.findMany({
         where: {
           parentCategoryId: {
             not: null,
@@ -124,13 +113,66 @@ export const ProductRouter = trpc
             },
           },
         },
+        orderBy: {
+          disposition: 'asc',
+        },
       });
 
       return {
-        shopCategories: categories.map((c) => ({
-          value: c.id,
-          label: `${c.parentCategory?.name} | ${c.name}`,
-        })),
+        shopCategories,
+      };
+    },
+  })
+
+  .mutation('updateOne', {
+    input: product.updateOrCreateOneSchema,
+    async resolve({ input }) {
+      return {
+        product: await prisma.product.update({
+          where: {
+            id: input.id,
+          },
+          include: {
+            shopCategory: { include: { parentCategory: true } },
+            artwork: true,
+          },
+          data: {
+            name: ucFirst(input.name),
+            slug: input.slug,
+            description: input.description,
+            height: input.height,
+            width: input.width,
+            forSale: input.forSale,
+            price: input.price,
+            shopCategoryId: input.shopCategory.value,
+            stock: input.stock,
+          },
+        }),
+      };
+    },
+  })
+
+  .mutation('updateOne', {
+    input: product.updateOrCreateOneSchema,
+    async resolve({ input }) {
+      return {
+        product: await prisma.product.create({
+          include: {
+            shopCategory: { include: { parentCategory: true } },
+            artwork: true,
+          },
+          data: {
+            name: ucFirst(input.name),
+            slug: input.slug,
+            description: input.description,
+            height: input.height,
+            width: input.width,
+            forSale: input.forSale,
+            price: input.price,
+            shopCategoryId: input.shopCategory.value,
+            stock: input.stock,
+          },
+        }),
       };
     },
   });

@@ -16,6 +16,7 @@ interface ProductTableProps {
 }
 
 export const ProductTable = ({ data }: ProductTableProps) => {
+
   const dataTable = useMemo(() => data, []);
 
   const columnHelper = createColumnHelper<z.infer<typeof productsListItemSchema>>();

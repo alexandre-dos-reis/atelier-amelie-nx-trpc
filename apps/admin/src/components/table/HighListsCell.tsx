@@ -13,8 +13,12 @@ export const TagsCell = ({ values }: TagsCellProps) => {
         <Tag
           key={v.value}
           border="0px"
-          color={chroma(colourOptions[(v.value - 1) % colourOptions.length].color).brighten(0.1).hex()}
-          bg={chroma(colourOptions[(v.value - 1) % colourOptions.length].color).alpha(0.1).hex()}
+          color={chroma(colourOptions[v.value % colourOptions.length].color)
+            .brighten(0.1)
+            .hex()}
+          bg={chroma(colourOptions[v.value % colourOptions.length].color)
+            .alpha(0.1)
+            .hex()}
           m="0.5"
         >
           {v.label}
