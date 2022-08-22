@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
 import { Layout } from './components/layout';
 import superjson from 'superjson';
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 export const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -23,6 +24,7 @@ export const App = () => {
             <Layout />
           </BrowserRouter>
         </ChakraProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </trpc.Provider>
   );

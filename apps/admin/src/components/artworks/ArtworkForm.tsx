@@ -18,14 +18,14 @@ interface ArtworkFormProps {
   artwork: schema.updateOrCreateOneSchemaType;
   onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType>;
   textSubmitButton: string;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 export const ArtworkForm = ({
   artwork,
   onSubmit,
   textSubmitButton,
-  isLoading = false,
+  isLoading,
   children,
 }: ArtworkFormProps) => {
   // Form

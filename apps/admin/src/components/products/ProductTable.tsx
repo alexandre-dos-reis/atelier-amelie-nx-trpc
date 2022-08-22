@@ -13,10 +13,10 @@ import { FaPalette } from 'react-icons/fa';
 
 interface ProductTableProps {
   data: z.infer<typeof productsListSchema>;
+  isSuccess: boolean;
 }
 
-export const ProductTable = ({ data }: ProductTableProps) => {
-
+export const ProductTable = ({ data, isSuccess }: ProductTableProps) => {
   const dataTable = useMemo(() => data, []);
 
   const columnHelper = createColumnHelper<z.infer<typeof productsListItemSchema>>();

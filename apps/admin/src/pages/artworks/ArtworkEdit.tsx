@@ -4,6 +4,7 @@ import { Progress, useToast, Text } from '@chakra-ui/react';
 import { ArtworkForm } from '../../components/artworks';
 import { findRoute } from '../../utils/find-route';
 import { DeleteBtn } from '../../components/buttons';
+import { ErrorToast, SuccessToast } from '../../components/toasts';
 
 export const ArtworkEdit = () => {
   // Params from router
@@ -44,60 +45,41 @@ export const ArtworkEdit = () => {
       return { previousData };
     },
     onSuccess: (data) => {
-      toast({
-        title: 'Mise à jour réussie !',
+      SuccessToast({
+        type: 'update',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été mise à jour.`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
     },
     onError: (data, variables) => {
-      toast({
-        title: 'Erreur !',
+      ErrorToast({
         description: `L'oeuvre ${variables.id} - ${variables.name} n'a pas été mise à jour. Raison : ${data.message}`,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
     },
   });
 
   const deleteMutation = trpc.useMutation('artwork.deleteOne', {
-    onMutate: async (variables) => {
+    onSuccess: async (data) => {
       await trpcContext.cancelQuery(['artwork.getAll']);
       const previousData = trpcContext.getQueryData(['artwork.getAll']);
       if (previousData) {
         trpcContext.setQueryData(['artwork.getAll'], {
           ...previousData,
-          artworks: previousData.artworks.filter((a) => a.id !== variables),
+          artworks: previousData.artworks.filter((a) => a.id !== data.artwork.id),
         });
       }
 
-      return { previousData };
-    },
-    onSuccess: (data) => {
       navigate(findRoute('artworks'), { replace: true });
+
       trpcContext.queryClient.removeQueries(['artwork.getOne', data.artwork.id], { exact: true });
-      toast({
-        title: 'Suppression réussie !',
+
+      SuccessToast({
+        type: 'delete',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été supprimée.`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
     },
     onError: (data, variables) => {
-      toast({
-        title: 'Erreur !',
+      ErrorToast({
         description: `L'oeuvre ${variables} n'a pas été supprimée. Raison : ${data.message}`,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
     },
   });
@@ -111,6 +93,7 @@ export const ArtworkEdit = () => {
         textSubmitButton="Mettre à jour"
         onSubmit={(data) => updateMutation.mutate(data)}
         artwork={data}
+        isLoading={updateMutation.isLoading}
       >
         <DeleteBtn onConfirm={() => deleteMutation.mutate(id)}>
           Etes-vous sûr de vouloir supprimer l'oeuvre <Text as="b">{data.name}</Text>?

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '../../utils/prisma';
 import { artwork } from '@atelier-amelie-nx-trpc/validation-schema';
 import { ucFirst } from '@atelier-amelie-nx-trpc/helpers';
+import { Prisma } from '@prisma/client';
 
 export const ArtworkRouter = trpc
   .router()
@@ -124,13 +125,30 @@ export const ArtworkRouter = trpc
   .mutation('deleteOne', {
     input: z.number(),
     async resolve({ input }) {
-      return {
-        artwork: await prisma.artwork.delete({
+      try {
+        const artwork = await prisma.artwork.delete({
           where: {
             id: input,
           },
-        }),
-      };
+        });
+        return {
+          artwork,
+        };
+      } catch (e) {
+        let message = '';
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === 'P2003') {
+            message =
+              'Il y a des produits associés à cette oeuvre. Supprimez les ou désactivez la publication. ';
+          }
+        }
+
+        throw new trpc.TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message,
+          cause: e,
+        });
+      }
     },
   })
 
@@ -154,7 +172,6 @@ export const ArtworkRouter = trpc
           },
         },
       });
-      console.log({artwork})
       return {
         artwork: {
           ...artwork,

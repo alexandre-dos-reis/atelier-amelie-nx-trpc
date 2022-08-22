@@ -3,7 +3,8 @@ import { DeleteBtn } from '../../../components/buttons';
 import { ProductForm } from '../../../components/products';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trpc } from '../../../utils/trpc';
-import { useQueryClient } from 'react-query';
+import { findRoute } from '../../../utils/find-route';
+import { ErrorToast, SuccessToast } from '../../../components/toasts';
 
 export const ProductEdit = () => {
   // Params from router
@@ -11,11 +12,12 @@ export const ProductEdit = () => {
   const id = parseInt(params['id'] as string);
   const trpcContext = trpc.useContext();
   const navigate = useNavigate();
+  const toast = useToast();
 
   // Trpc / React Query
   const { data, isLoading, isError, error } = trpc.useQuery(['product.getOne', { id }]);
 
-  const mutation = trpc.useMutation(['product.updateOne'], {
+  const updateMutation = trpc.useMutation(['product.updateOne'], {
     onSuccess: async (data) => {
       trpcContext.setQueryData(['product.getOne', { id: data.product.id }], {
         product: data.product,
@@ -37,29 +39,43 @@ export const ProductEdit = () => {
         });
       }
 
-      toast({
-        title: 'Mise à jour réussie !',
+      SuccessToast({
+        type: 'update',
         description: `Le produit ${data.product.id} - ${data.product.name} a été mise à jour.`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
     },
     onError: (data, variables) => {
-      toast({
-        title: 'Erreur !',
+      ErrorToast({
         description: `Le produit ${variables.id} - ${variables.name} n'a pas été mise à jour. Raison : ${data.message}`,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
       });
     },
   });
 
-  // Toast
-  const toast = useToast();
+  const deleteMutation = trpc.useMutation(['product.deleteOne'], {
+    onSuccess: async (data) => {
+      await trpcContext.cancelQuery(['product.getAll']);
+
+      const previousData = trpcContext.getQueryData(['product.getAll']);
+      if (previousData) {
+        trpcContext.setQueryData(['product.getAll'], {
+          products: previousData.products.filter((p) => p.id !== data.product.id),
+        });
+      }
+
+      SuccessToast({
+        type: 'delete',
+        description: `Le produit ${data.product.id} - ${data.product.name} a été supprimé.`,
+      });
+
+      navigate(findRoute('shop.products'), { replace: true });
+    },
+
+    onError: (data) => {
+      ErrorToast({
+        description: `Le produit n'a pas été supprimé. Raison: ${data.message}`,
+      });
+    },
+  });
 
   // React Query handlers...
   if (isError) return <div>{error.message}</div>;
@@ -68,7 +84,8 @@ export const ProductEdit = () => {
     return (
       <ProductForm
         textSubmitButton="Mettre à jour"
-        onSubmit={(data) => mutation.mutate(data)}
+        isLoading={updateMutation.isLoading}
+        onSubmit={(data) => updateMutation.mutate(data)}
         product={{
           ...data.product,
           shopCategory: {
@@ -78,9 +95,13 @@ export const ProductEdit = () => {
               ' | ' +
               data.product.shopCategory.name,
           },
+          artwork: {
+            label: data.product.artwork.name,
+            value: data.product.artwork.id,
+          },
         }}
       >
-        <DeleteBtn onConfirm={() => console.log(id)}>
+        <DeleteBtn onConfirm={() => deleteMutation.mutate({ id })}>
           Etes-vous sûr de vouloir supprimer le produit <Text as="b">{data.product.name}</Text>?
         </DeleteBtn>
       </ProductForm>

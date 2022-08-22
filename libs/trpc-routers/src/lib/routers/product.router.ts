@@ -73,7 +73,6 @@ export const ProductRouter = trpc
               name: true,
             },
           },
-          artworkId: true,
           shopCategory: {
             select: {
               id: true,
@@ -124,6 +123,23 @@ export const ProductRouter = trpc
     },
   })
 
+  .query('getAllArtworks', {
+    async resolve() {
+      const artworks = await prisma.artwork.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      });
+      return {
+        artworks,
+      };
+    },
+  })
+
   .mutation('updateOne', {
     input: product.updateOrCreateOneSchema,
     async resolve({ input }) {
@@ -152,25 +168,50 @@ export const ProductRouter = trpc
     },
   })
 
-  .mutation('updateOne', {
+  .mutation('createOne', {
     input: product.updateOrCreateOneSchema,
     async resolve({ input }) {
-      return {
-        product: await prisma.product.create({
-          include: {
-            shopCategory: { include: { parentCategory: true } },
-            artwork: true,
+      const product = await prisma.product.create({
+        include: {
+          shopCategory: { include: { parentCategory: true } },
+          artwork: true,
+        },
+        data: {
+          name: ucFirst(input.name),
+          slug: input.slug,
+          description: input.description,
+          height: input.height,
+          width: input.width,
+          forSale: input.forSale,
+          price: input.price,
+          stock: input.stock,
+          artwork: {
+            connect: {
+              id: input.artwork.value,
+            },
           },
-          data: {
-            name: ucFirst(input.name),
-            slug: input.slug,
-            description: input.description,
-            height: input.height,
-            width: input.width,
-            forSale: input.forSale,
-            price: input.price,
-            shopCategoryId: input.shopCategory.value,
-            stock: input.stock,
+          shopCategory: {
+            connect: {
+              id: input.shopCategory.value,
+            },
+          },
+        },
+      });
+      return {
+        product,
+      };
+    },
+  })
+
+  .mutation('deleteOne', {
+    input: z.object({
+      id: z.number(),
+    }),
+    async resolve({ input }) {
+      return {
+        product: await prisma.product.delete({
+          where: {
+            id: input.id,
           },
         }),
       };

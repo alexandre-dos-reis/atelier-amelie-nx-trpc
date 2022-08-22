@@ -1,5 +1,5 @@
 import { CheckIcon } from '@chakra-ui/icons';
-import { Button } from '@chakra-ui/react';
+import { Button, Spinner } from '@chakra-ui/react';
 
 interface SubmitBtnProps {
   isDisabled?: boolean;
@@ -9,9 +9,14 @@ interface SubmitBtnProps {
 
 export const SubmitBtn = ({ isDisabled = false, isLoading = false, label }: SubmitBtnProps) => {
   return (
-    <Button type="submit" colorScheme="green" isDisabled={isDisabled} isLoading={isLoading}>
+    <Button
+      type="submit"
+      colorScheme="green"
+      isDisabled={isDisabled || isLoading}
+    >
       {label}
-      <CheckIcon marginStart="3" />
+      {!isLoading && <CheckIcon marginStart="3" />}
+      {isLoading && <Spinner marginStart="3" />}
     </Button>
   );
 };

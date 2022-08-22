@@ -16,6 +16,7 @@ export const ProductCreate = () => {
   return (
     <ProductForm
       textSubmitButton="Créer"
+      isLoading={false}
       onSubmit={onSubmit}
       product={{
         id: 0,
@@ -24,13 +25,17 @@ export const ProductCreate = () => {
         description: '',
         forSale: false,
         price: 0,
+        stock: 0,
+        width: null,
+        height: null,
         shopCategory: {
           label: '',
           value: 0,
         },
-        stock: 0,
-        height: null,
-        width: null,
+        artwork: {
+          label: '',
+          value: 0,
+        },
       }}
     />
   );

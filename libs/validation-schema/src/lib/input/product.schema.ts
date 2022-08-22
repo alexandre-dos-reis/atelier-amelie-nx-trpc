@@ -16,6 +16,10 @@ export const updateOrCreateOneSchema = z.object({
     value: z.number(),
     label: z.string(),
   }),
+  artwork: z.object({
+    value: z.number(),
+    label: z.string(),
+  }),
 });
 export type updateOrCreateOneSchemaType = z.infer<typeof updateOrCreateOneSchema>;
 

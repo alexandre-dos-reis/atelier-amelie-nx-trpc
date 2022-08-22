@@ -24,7 +24,7 @@ export const ProductsList = () => {
         </Box>
       )}
       {isSuccess && data.products.length !== 0 && (
-        <ProductTable data={data.products} />
+        <ProductTable data={data.products} isSuccess={isSuccess}/>
       )}
     </>
   );

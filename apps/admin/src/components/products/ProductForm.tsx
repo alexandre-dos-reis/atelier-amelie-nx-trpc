@@ -13,14 +13,14 @@ interface ProductFormProps {
   product: schema.updateOrCreateOneSchemaType;
   onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType>;
   textSubmitButton: string;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 export const ProductForm = ({
   product,
   onSubmit,
   textSubmitButton,
-  isLoading = false,
+  isLoading,
   children,
 }: ProductFormProps) => {
   // Form
@@ -57,6 +57,11 @@ export const ProductForm = ({
       value: sc.id,
     }));
 
+  const artworks = trpc.useQuery(['product.getAllArtworks']).data?.artworks.map((a) => ({
+    value: a.id,
+    label: a.name,
+  }));
+
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -79,6 +84,7 @@ export const ProductForm = ({
           </Flex>
           <Flex w="full" gap={gap} justify="center">
             <Select c={c} label="Catégorie" name="shopCategory" options={shopCategories} required />
+            <Select c={c} label="Oeuvre" name="artwork" options={artworks} required />
           </Flex>
           <Flex w="full" gap={gap} justify="center">
             <Input c={c} type="number" name="height" label="Hauteur en millimètres" />
