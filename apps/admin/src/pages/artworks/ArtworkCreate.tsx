@@ -13,6 +13,7 @@ export const ArtworkCreate = () => {
   const createMutation = trpc.useMutation('artwork.createOne', {
     onSuccess: async (data) => {
       await trpcContext.cancelQuery(['artwork.getAll']);
+      trpcContext.invalidateQueries(['product.getAllArtworks']);
       const previousData = trpcContext.getQueryData(['artwork.getAll']);
       if (previousData) {
         trpcContext.setQueryData(['artwork.getAll'], {

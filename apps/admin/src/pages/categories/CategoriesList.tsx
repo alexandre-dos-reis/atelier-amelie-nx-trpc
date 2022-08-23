@@ -29,7 +29,12 @@ export const CategoriesList = () => {
       )}
       {isSuccess && data.categories.length !== 0 && (
         <DndProvider backend={HTML5Backend}>
-          <CategoryTable data={data.categories} />
+          <CategoryTable
+            data={data.categories.map((c) => ({
+              ...c,
+              artworksLength: c.artworks.length,
+            }))}
+          />
         </DndProvider>
       )}
     </>

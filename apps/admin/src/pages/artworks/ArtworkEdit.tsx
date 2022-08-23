@@ -1,50 +1,42 @@
 import { trpc } from '../../utils/trpc';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Progress, useToast, Text } from '@chakra-ui/react';
+import { Progress, Text } from '@chakra-ui/react';
 import { ArtworkForm } from '../../components/artworks';
 import { findRoute } from '../../utils/find-route';
 import { DeleteBtn } from '../../components/buttons';
 import { ErrorToast, SuccessToast } from '../../components/toasts';
 
 export const ArtworkEdit = () => {
-  // Params from router
   const params = useParams();
   const id = parseInt(params['id'] as string);
   const trpcContext = trpc.useContext();
   const navigate = useNavigate();
 
-  // Trpc / React Query
   const { data, isLoading, isError, error } = trpc.useQuery(['artwork.getOne', id]);
 
-  // Toast
-  const toast = useToast();
-
   const updateMutation = trpc.useMutation('artwork.updateOne', {
-    onMutate: async (variables) => {
-      trpcContext.setQueryData(['artwork.getOne', variables.id], {
-        ...variables,
-        madeAt: variables.madeAt || null,
+    onSuccess: async (data) => {
+      trpcContext.setQueryData(['artwork.getOne', data.artwork.id], {
+        artwork: data.artwork,
       });
-
       await trpcContext.cancelQuery(['artwork.getAll']);
       const previousData = trpcContext.getQueryData(['artwork.getAll']);
       if (previousData) {
         trpcContext.setQueryData(['artwork.getAll'], {
           ...previousData,
           artworks: previousData.artworks.map((a) =>
-            a.id === variables.id
+            a.id === data.artwork.id
               ? {
                   ...a,
-                  ...variables,
+                  ...data.artwork,
                 }
               : a
           ),
         });
       }
 
-      return { previousData };
-    },
-    onSuccess: (data) => {
+      trpcContext.invalidateQueries(['product.getAllArtworks']);
+
       SuccessToast({
         type: 'update',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été mise à jour.`,
@@ -72,6 +64,8 @@ export const ArtworkEdit = () => {
 
       trpcContext.queryClient.removeQueries(['artwork.getOne', data.artwork.id], { exact: true });
 
+      trpcContext.invalidateQueries(['product.getAllArtworks']);
+
       SuccessToast({
         type: 'delete',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été supprimée.`,
@@ -92,11 +86,17 @@ export const ArtworkEdit = () => {
       <ArtworkForm
         textSubmitButton="Mettre à jour"
         onSubmit={(data) => updateMutation.mutate(data)}
-        artwork={data}
+        artwork={{
+          ...data.artwork,
+          categories: data.artwork.categories.map((c) => ({
+            label: c.name,
+            value: c.id,
+          })),
+        }}
         isLoading={updateMutation.isLoading}
       >
-        <DeleteBtn onConfirm={() => deleteMutation.mutate(id)}>
-          Etes-vous sûr de vouloir supprimer l'oeuvre <Text as="b">{data.name}</Text>?
+        <DeleteBtn onConfirm={() => deleteMutation.mutate({ id })}>
+          Etes-vous sûr de vouloir supprimer l'oeuvre <Text as="b">{data.artwork.name}</Text>?
         </DeleteBtn>
       </ArtworkForm>
     );

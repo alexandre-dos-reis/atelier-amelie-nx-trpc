@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { findRoute } from '../../utils/find-route';
-import { CustomTable, LinkCell, SwitchCell, TagsCell } from '../table';
+import { CustomTable, LinkCell, SwitchCell, TagsCell, CountCell } from '../table';
 import { trpc } from '../../utils/trpc';
 import { Tag } from '@chakra-ui/react';
 import {
@@ -9,7 +9,6 @@ import {
   productsListSchema,
 } from '@atelier-amelie-nx-trpc/validation-schema';
 import { z } from 'zod';
-import { FaPalette } from 'react-icons/fa';
 
 interface ProductTableProps {
   data: z.infer<typeof productsListSchema>;
@@ -23,9 +22,13 @@ export const ProductTable = ({ data, isSuccess }: ProductTableProps) => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('updatedAt', {
-        header: 'Mise à jour',
-        cell: (info) => info.getValue().toLocaleDateString(),
+      // columnHelper.accessor('updatedAt', {
+      //   header: 'Mise à jour',
+      //   cell: (info) => info.getValue().toLocaleDateString(),
+      // }),
+      columnHelper.accessor('stock', {
+        header: '# Stock',
+        cell: (props) => <CountCell value={props.getValue()} redAtZero />,
       }),
 
       columnHelper.accessor('name', {
@@ -52,15 +55,6 @@ export const ProductTable = ({ data, isSuccess }: ProductTableProps) => {
               { label: props.getValue().name, value: props.getValue().id },
             ]}
           />
-        ),
-      }),
-
-      columnHelper.accessor('stock', {
-        header: 'Stock',
-        cell: (props) => (
-          <Tag bgColor={props.getValue() === 0 ? 'red.500' : 'gray.500'} color="white">
-            {props.getValue()}
-          </Tag>
         ),
       }),
 

@@ -113,7 +113,9 @@ export const ProductRouter = trpc
           },
         },
         orderBy: {
-          disposition: 'asc',
+          parentCategory: {
+            name: 'asc'
+          }
         },
       });
 
@@ -160,8 +162,9 @@ export const ProductRouter = trpc
             width: input.width,
             forSale: input.forSale,
             price: input.price,
-            shopCategoryId: input.shopCategory.value,
             stock: input.stock,
+            shopCategoryId: input.shopCategory.value,
+            artworkId: input.artwork.value,
           },
         }),
       };

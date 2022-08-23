@@ -11,5 +11,9 @@ export const SwitchCell = ({ initialIsChecked, onChangeCallback }: SwitchCellPro
     onChangeCallback(e.target.checked);
   };
 
-  return <Flex align='center' justify='center'><Switch defaultChecked={initialIsChecked} onChange={onChange} /></Flex>;
+  return (
+    <Flex align="center" justify="center">
+      <Switch defaultChecked={initialIsChecked} onChange={onChange} />
+    </Flex>
+  );
 };

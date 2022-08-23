@@ -12,6 +12,11 @@ export const ArtworkRouter = trpc
     async resolve() {
       const artworks = await prisma.artwork.findMany({
         include: {
+          products: {
+            select: {
+              id: true,
+            },
+          },
           categories: {
             select: {
               id: true,
@@ -27,10 +32,7 @@ export const ArtworkRouter = trpc
       return {
         artworks: artworks.map((a) => ({
           ...a,
-          categories: a.categories.map((c) => ({
-            label: c.name,
-            value: c.id,
-          })),
+          totalProducts: a.products.length,
         })),
       };
     },
@@ -55,11 +57,7 @@ export const ArtworkRouter = trpc
         },
       });
       return {
-        ...artwork,
-        categories: artwork.categories.map((c) => ({
-          label: c.name,
-          value: c.id,
-        })),
+        artwork,
       };
     },
   })
@@ -79,26 +77,27 @@ export const ArtworkRouter = trpc
   .mutation('updateOne', {
     input: artwork.updateOrCreateOneSchema,
     async resolve({ input }) {
+      const artwork = await prisma.artwork.update({
+        where: {
+          id: input.id,
+        },
+        include: {
+          categories: true,
+        },
+        data: {
+          name: ucFirst(input.name),
+          slug: input.slug,
+          description: input.description,
+          showInGallery: input.showInGallery,
+          showInPortfolio: input.showInPortfolio,
+          madeAt: input.madeAt,
+          categories: {
+            set: input.categories.map((c) => ({ id: c.value })),
+          },
+        },
+      });
       return {
-        artwork: await prisma.artwork.update({
-          where: {
-            id: input.id,
-          },
-          include: {
-            categories: true,
-          },
-          data: {
-            name: ucFirst(input.name),
-            slug: input.slug,
-            description: input.description,
-            showInGallery: input.showInGallery,
-            showInPortfolio: input.showInPortfolio,
-            madeAt: input.madeAt,
-            categories: {
-              set: input.categories.map((c) => ({ id: c.value })),
-            },
-          },
-        }),
+        artwork,
       };
     },
   })
@@ -106,29 +105,33 @@ export const ArtworkRouter = trpc
   .mutation('updateShowInGallery', {
     input: artwork.updateShowInGallerySchema,
     async resolve({ input }) {
+      const artwork = await prisma.artwork.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          showInGallery: input.isChecked,
+        },
+        include: {
+          categories: true,
+        },
+      });
+
       return {
-        artwork: await prisma.artwork.update({
-          where: {
-            id: input.id,
-          },
-          data: {
-            showInGallery: input.isChecked,
-          },
-          include: {
-            categories: true,
-          },
-        }),
+        artwork,
       };
     },
   })
 
   .mutation('deleteOne', {
-    input: z.number(),
+    input: z.object({
+      id: z.number().positive(),
+    }),
     async resolve({ input }) {
       try {
         const artwork = await prisma.artwork.delete({
           where: {
-            id: input,
+            id: input.id,
           },
         });
         return {
@@ -158,6 +161,11 @@ export const ArtworkRouter = trpc
       const artwork = await prisma.artwork.create({
         include: {
           categories: true,
+          products: {
+            select: {
+              id: true,
+            },
+          },
         },
         data: {
           name: ucFirst(input.name),
@@ -175,10 +183,7 @@ export const ArtworkRouter = trpc
       return {
         artwork: {
           ...artwork,
-          categories: artwork.categories.map((c) => ({
-            label: c.name,
-            value: c.id,
-          })),
+          totalProducts: artwork.products.length,
         },
       };
     },

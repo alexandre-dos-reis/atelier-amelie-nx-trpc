@@ -21,7 +21,7 @@ model Artwork {
   watermarkedFilename String?
   designState         String?
   categories          Category[]
-  Product             Product[]
+  products            Product[]
 }
 
 model Category {
@@ -62,7 +62,7 @@ model ShopCategory {
   parentCategory   ShopCategory?  @relation("shopCatSelfRelation", fields: [parentCategoryId], references: [id])
   subCategories    ShopCategory[] @relation("shopCatSelfRelation")
   parentCategoryId Int?
-  Product          Product[]
+  products         Product[]
 }
 
 model ShippingCost {

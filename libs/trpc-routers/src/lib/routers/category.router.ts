@@ -1,6 +1,7 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../../utils/prisma';
+import { category } from '@atelier-amelie-nx-trpc/validation-schema';
 
 export const CategoryRouter = trpc
   .router()
@@ -16,7 +17,7 @@ export const CategoryRouter = trpc
           showInGallery: true,
           artworks: {
             select: {
-              _count: true,
+              id: true
             },
           },
         },
@@ -26,12 +27,8 @@ export const CategoryRouter = trpc
       });
       return {
         categories: categories.map((c) => ({
-          id: c.id,
-          updatedAt: c.updatedAt,
-          name: c.name,
-          disposition: c.disposition,
+          ...c,
           showInGallery: c.showInGallery,
-          artworksLength: c.artworks.length,
         })),
       };
     },
@@ -78,5 +75,80 @@ export const CategoryRouter = trpc
           })
         )
       );
+    },
+  })
+
+  .mutation('updateOne', {
+    input: category.updateOrCreateOneSchema,
+    async resolve({ input }) {
+      const category = await prisma.category.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...input,
+        },
+      });
+      return {
+        category,
+      };
+    },
+  })
+
+  .mutation('createOne', {
+    input: category.updateOrCreateOneSchema,
+
+    async resolve({ input }) {
+      const {
+        _max: { disposition: maxDisposition },
+      } = await prisma.category.aggregate({
+        _max: {
+          disposition: true,
+        },
+      });
+
+      const category = await prisma.category.create({
+        data: {
+          name: input.name,
+          slug: input.slug,
+          description: input.description,
+          disposition: (maxDisposition ?? 0) + 1,
+        },
+        select: {
+          id: true,
+          updatedAt: true,
+          name: true,
+          disposition: true,
+          showInGallery: true,
+          artworks: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      return {
+        category,
+        artworksLength: category.artworks.length,
+      };
+    },
+  })
+
+  .mutation('deleteOne', {
+    input: z.object({
+      id: z.number().positive(),
+    }),
+
+    async resolve({ input }) {
+      const category = await prisma.category.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return {
+        category,
+      };
     },
   });

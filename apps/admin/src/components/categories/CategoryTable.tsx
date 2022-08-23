@@ -7,7 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { FC, useMemo, useState } from 'react';
-import { CustomTable, LinkCell, SwitchCell } from '../table';
+import { CountCell, CustomTable, LinkCell, SwitchCell } from '../table';
 import { findRoute } from '../../utils/find-route';
 import { DragHandleIcon } from '@chakra-ui/icons';
 import { useDrag, useDrop } from 'react-dnd';
@@ -94,11 +94,7 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
       }),
       columnHelper.accessor('artworksLength', {
         header: "Nombre d'oeuvres associées",
-        cell: (props) => (
-          <Tag bgColor={'gray.500'} color="white">
-            {props.getValue()}
-          </Tag>
-        ),
+        cell: (props) => <CountCell value={props.getValue()} />,
       }),
     ],
     []

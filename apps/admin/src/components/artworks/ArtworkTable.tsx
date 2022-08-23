@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import { createColumnHelper, useReactTable, getCoreRowModel } from '@tanstack/react-table';
 import { findRoute } from '../../utils/find-route';
-import { CustomTable, LinkCell, SwitchCell, TagsCell } from '../table';
+import { CustomTable, LinkCell, SwitchCell, TagsCell, CountCell } from '../table';
 import { trpc } from '../../utils/trpc';
 
 type artworkItem = {
@@ -9,15 +9,17 @@ type artworkItem = {
   updatedAt: Date;
   name: string;
   showInGallery: boolean;
+  totalProducts: number;
   categories: { label: string; value: number }[];
 };
 
 interface ArtworkTableProps {
   data: artworkItem[];
+  isSuccess: boolean;
 }
 
-export const ArtworkTable = ({ data }: ArtworkTableProps) => {
-  const dataTable = useMemo(() => data, []);
+export const ArtworkTable = ({ data, isSuccess }: ArtworkTableProps) => {
+  const dataTable = useMemo(() => data, [data]);
 
   const columnHelper = createColumnHelper<artworkItem>();
 
@@ -27,17 +29,19 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
         header: 'Mise à jour',
         cell: (info) => info.getValue().toLocaleDateString(),
       }),
+
       columnHelper.accessor('name', {
         header: 'Nom',
         cell: (props) => {
           const artwork = props.row.original;
           return (
-            <LinkCell to={findRoute('artworks.edit', artwork.id)} fontSize="md">
+            <LinkCell to={findRoute('artworks.edit', artwork.id)} fontSize="sm">
               {artwork.name}
             </LinkCell>
           );
         },
       }),
+
       columnHelper.display({
         id: 'showInGallery',
         header: 'Publier ?',
@@ -92,6 +96,12 @@ export const ArtworkTable = ({ data }: ArtworkTableProps) => {
           );
         }),
       }),
+
+      columnHelper.accessor('totalProducts', {
+        header: '# produits',
+        cell: (props) => <CountCell value={props.getValue()} />,
+      }),
+
       columnHelper.display({
         id: 'categories',
         header: 'Catégories',

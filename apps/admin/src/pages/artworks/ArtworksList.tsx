@@ -23,7 +23,19 @@ export const ArtworksList = () => {
           Il n'y a aucune oeuvres pour l'instant.
         </Box>
       )}
-      {isSuccess && data.artworks.length !== 0 && <ArtworkTable data={data.artworks} />}
+      {isSuccess && data.artworks.length !== 0 && (
+        <ArtworkTable
+          isSuccess={isSuccess}
+          data={data.artworks.map((a) => ({
+            ...a,
+            totalProducts: a.totalProducts,
+            categories: a.categories.map((c) => ({
+              label: c.name,
+              value: c.id,
+            })),
+          }))}
+        />
+      )}
     </>
   );
 };
