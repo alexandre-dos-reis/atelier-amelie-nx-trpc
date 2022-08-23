@@ -65,6 +65,56 @@ model ShopCategory {
   products         Product[]
 }
 
+enum PURCHASE_STATUS {
+  WAITING_FOR_PAYMENT
+  IN_PREPARATION
+  DELIVERING
+  DELIVERED
+  CANCELED
+  REFUNDED
+}
+
+model Purchase {
+  id             String          @id @default(dbgenerated("uuid()"))
+  stripeId       String
+  purchaseAt     DateTime        @default(now())
+  status         PURCHASE_STATUS
+  trackingNumber String
+  email          String
+  weightCost     Int
+  insuranceCost  Int
+  addresses      Address[]
+  items          PurchaseItem[]
+}
+
+model PurchaseItem {
+  id           Int       @id @default(autoincrement())
+  productName  String
+  quantity     Int
+  productPrice String
+  Purchase     Purchase? @relation(fields: [purchaseId], references: [id])
+  purchaseId   String?
+}
+
+enum ADDRESS_TYPE {
+  SINGLE
+  DELIVERY
+  BILLING
+}
+
+model Address {
+  id         Int          @id @default(autoincrement())
+  type       ADDRESS_TYPE
+  fullname   String
+  address    String
+  postalCode String
+  city       String
+  Country    String
+  Phone      String?
+  Purchase   Purchase     @relation(fields: [purchaseId], references: [id])
+  purchaseId String
+}
+
 model ShippingCost {
   id            Int @id @default(autoincrement())
   max           Int

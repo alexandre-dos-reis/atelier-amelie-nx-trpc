@@ -1,7 +1,6 @@
 import { prisma } from '../../libs/prisma/src';
 
 export async function settingsSeed() {
-  // SHIPPING COSTS
   const shippingCostsArray = [
     [3000, 500, 0],
     [5000, 500, 250],
