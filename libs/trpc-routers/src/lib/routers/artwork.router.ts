@@ -1,6 +1,6 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
-import { prisma } from '../../utils/prisma';
+import { prisma } from '@atelier-amelie-nx-trpc/prisma';
 import { artwork } from '@atelier-amelie-nx-trpc/validation-schema';
 import { ucFirst } from '@atelier-amelie-nx-trpc/helpers';
 import { Prisma } from '@prisma/client';

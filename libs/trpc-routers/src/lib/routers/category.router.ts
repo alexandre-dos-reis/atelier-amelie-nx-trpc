@@ -1,6 +1,6 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
-import { prisma } from '../../utils/prisma';
+import { prisma } from '@atelier-amelie-nx-trpc/prisma';
 import { category } from '@atelier-amelie-nx-trpc/validation-schema';
 
 export const CategoryRouter = trpc

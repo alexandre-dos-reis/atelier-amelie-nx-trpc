@@ -2,7 +2,7 @@ import { ucFirst } from '@atelier-amelie-nx-trpc/helpers';
 import { productsListSchema, product } from '@atelier-amelie-nx-trpc/validation-schema';
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
-import { prisma } from '../../utils/prisma';
+import { prisma } from '@atelier-amelie-nx-trpc/prisma';
 
 export const ProductRouter = trpc
   .router()
