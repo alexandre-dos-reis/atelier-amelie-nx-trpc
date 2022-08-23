@@ -25,10 +25,10 @@ export const ArtworkTable = ({ data, isSuccess }: ArtworkTableProps) => {
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('updatedAt', {
-        header: 'Mise à jour',
-        cell: (info) => info.getValue().toLocaleDateString(),
-      }),
+      // columnHelper.accessor('updatedAt', {
+      //   header: 'Mise à jour',
+      //   cell: (info) => info.getValue().toLocaleDateString(),
+      // }),
 
       columnHelper.accessor('name', {
         header: 'Nom',

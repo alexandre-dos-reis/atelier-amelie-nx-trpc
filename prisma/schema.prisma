@@ -72,7 +72,7 @@ model ShippingCost {
   insuranceCost Int
 }
 
-model AppVariable {
+model AdminVariable {
   id    Int    @id @default(autoincrement())
   key   String @unique
   value String
