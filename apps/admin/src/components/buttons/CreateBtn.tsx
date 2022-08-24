@@ -9,7 +9,7 @@ interface CreateBtnProps {
 
 export const CreateBtn = ({ to, label }: CreateBtnProps) => {
   return (
-    <Button as={Link} to={to} colorScheme="blue">
+    <Button as={Link} to={to}  colorScheme="blue">
       <AddIcon marginEnd="3" />
       {label}
     </Button>

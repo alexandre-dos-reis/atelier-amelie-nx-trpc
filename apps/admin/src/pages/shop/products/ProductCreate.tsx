@@ -1,5 +1,5 @@
 import { SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { trpc } from '../../../utils/trpc';
 import { product as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { findRoute } from '../../../utils/find-route';
@@ -7,21 +7,11 @@ import { ProductForm } from '../../../components/products';
 import { ErrorToast, SuccessToast } from '../../..//components/toasts';
 
 export const ProductCreate = () => {
-  const trpcContext = trpc.useContext();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
 
   const createMutation = trpc.useMutation('product.createOne', {
     onSuccess: async (data) => {
-      await trpcContext.cancelQuery(['product.getAll']);
-      trpcContext.invalidateQueries(['artwork.getAll'])
-      const previousData = trpcContext.getQueryData(['product.getAll']);
-      if (previousData) {
-        trpcContext.setQueryData(['product.getAll'], {
-          ...previousData,
-          products: [data.product, ...previousData.products],
-        });
-      }
-
       SuccessToast({
         type: 'create',
         description: `Le produit ${data.product.id} - ${data.product.name} a été créée.`,
@@ -35,7 +25,12 @@ export const ProductCreate = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType> = (data) => createMutation.mutate(data);
+  const onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType> = (data) => {
+    createMutation.mutate(data);
+  };
+
+  const queryArtworkId = parseInt(params.get('artworkId') ?? '', 10) ?? 0;
+  const queryArtworkName = params.get('artworkName') ?? '';
 
   return (
     <ProductForm
@@ -50,15 +45,15 @@ export const ProductCreate = () => {
         forSale: false,
         price: 0,
         stock: 0,
-        width: null,
-        height: null,
+        width: 0,
+        height: 0,
         shopCategory: {
           label: '',
           value: 0,
         },
         artwork: {
-          label: '',
-          value: 0,
+          label: queryArtworkName,
+          value: queryArtworkId,
         },
       }}
     />

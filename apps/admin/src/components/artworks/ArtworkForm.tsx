@@ -15,6 +15,7 @@ import { BackBtn, SubmitBtn } from '../buttons';
 
 interface ArtworkFormProps {
   children?: ReactNode;
+  bottomChildren?: ReactNode;
   artwork: schema.updateOrCreateOneSchemaType;
   onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType>;
   textSubmitButton: string;
@@ -27,6 +28,7 @@ export const ArtworkForm = ({
   textSubmitButton,
   isLoading,
   children,
+  bottomChildren,
 }: ArtworkFormProps) => {
   // Form
   const {
@@ -104,6 +106,9 @@ export const ArtworkForm = ({
           {children}
         </Flex>
       </form>
+      <Flex mt={gap + 5} justify="space-between">
+        {bottomChildren}
+      </Flex>
     </Box>
   );
 };

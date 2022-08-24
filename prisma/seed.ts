@@ -1,10 +1,11 @@
 import { prisma } from '../libs/prisma/src';
-import { gallerySeeds, shopSeeds, settingsSeed } from './seeds';
+import { gallerySeeds, shopSeeds, settingsSeed, purchasesSeed } from './seeds';
 
 async function main() {
   await gallerySeeds();
   await shopSeeds();
   await settingsSeed();
+  await purchasesSeed();
 }
 
 main()

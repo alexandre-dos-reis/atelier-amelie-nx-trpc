@@ -1,4 +1,4 @@
-import { Table, Tag, Tbody, Thead, TableContainer, Td, Tr, Th } from '@chakra-ui/react';
+import { Table, Tbody, Thead, TableContainer, Td, Tr, Th } from '@chakra-ui/react';
 import {
   createColumnHelper,
   flexRender,
@@ -7,7 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { FC, useMemo, useState } from 'react';
-import { CountCell, CustomTable, LinkCell, SwitchCell } from '../table';
+import { CountCell, LinkCell, SwitchCell } from '../table';
 import { findRoute } from '../../utils/find-route';
 import { DragHandleIcon } from '@chakra-ui/icons';
 import { useDrag, useDrop } from 'react-dnd';
@@ -108,7 +108,6 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
   });
 
   const reorderMutation = trpc.useMutation('category.reOrder');
-  const trpcContext = trpc.useContext();
 
   const reorderRow = (draggedRowIndex: number, targetRowIndex: number) => {
     data.splice(targetRowIndex, 0, data.splice(draggedRowIndex, 1)[0] as categoryListItem);
@@ -125,11 +124,7 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
       })),
     ]);
 
-    reorderMutation.mutate(newDisposition, {
-      onSuccess: () => {
-        trpcContext.invalidateQueries(['category.getAll']);
-      },
-    });
+    reorderMutation.mutate(newDisposition);
   };
 
   const [animationParent] = useAutoAnimate<HTMLTableSectionElement>();

@@ -3,40 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Progress, Text } from '@chakra-ui/react';
 import { ArtworkForm } from '../../components/artworks';
 import { findRoute } from '../../utils/find-route';
-import { DeleteBtn } from '../../components/buttons';
+import { CreateBtn, DeleteBtn } from '../../components/buttons';
 import { ErrorToast, SuccessToast } from '../../components/toasts';
 
 export const ArtworkEdit = () => {
   const params = useParams();
   const id = parseInt(params['id'] as string);
-  const trpcContext = trpc.useContext();
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = trpc.useQuery(['artwork.getOne', id]);
 
   const updateMutation = trpc.useMutation('artwork.updateOne', {
     onSuccess: async (data) => {
-      trpcContext.setQueryData(['artwork.getOne', data.artwork.id], {
-        artwork: data.artwork,
-      });
-      await trpcContext.cancelQuery(['artwork.getAll']);
-      const previousData = trpcContext.getQueryData(['artwork.getAll']);
-      if (previousData) {
-        trpcContext.setQueryData(['artwork.getAll'], {
-          ...previousData,
-          artworks: previousData.artworks.map((a) =>
-            a.id === data.artwork.id
-              ? {
-                  ...a,
-                  ...data.artwork,
-                }
-              : a
-          ),
-        });
-      }
-
-      trpcContext.invalidateQueries(['product.getAllArtworks']);
-
       SuccessToast({
         type: 'update',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été mise à jour.`,
@@ -51,25 +29,11 @@ export const ArtworkEdit = () => {
 
   const deleteMutation = trpc.useMutation('artwork.deleteOne', {
     onSuccess: async (data) => {
-      await trpcContext.cancelQuery(['artwork.getAll']);
-      const previousData = trpcContext.getQueryData(['artwork.getAll']);
-      if (previousData) {
-        trpcContext.setQueryData(['artwork.getAll'], {
-          ...previousData,
-          artworks: previousData.artworks.filter((a) => a.id !== data.artwork.id),
-        });
-      }
-
-      navigate(findRoute('artworks'), { replace: true });
-
-      trpcContext.queryClient.removeQueries(['artwork.getOne', data.artwork.id], { exact: true });
-
-      trpcContext.invalidateQueries(['product.getAllArtworks']);
-
       SuccessToast({
         type: 'delete',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été supprimée.`,
       });
+      navigate(findRoute('artworks'), { replace: true });
     },
     onError: (data, variables) => {
       ErrorToast({
@@ -94,6 +58,16 @@ export const ArtworkEdit = () => {
           })),
         }}
         isLoading={updateMutation.isLoading}
+        bottomChildren={
+          <CreateBtn
+            label="Créer un produit à partir de cette oeuvre"
+            to={
+              findRoute('shop.products.create') +
+              `?artworkId=${data.artwork.id}` +
+              `&artworkName=${data.artwork.name}`
+            }
+          />
+        }
       >
         <DeleteBtn onConfirm={() => deleteMutation.mutate({ id })}>
           Etes-vous sûr de vouloir supprimer l'oeuvre <Text as="b">{data.artwork.name}</Text>?

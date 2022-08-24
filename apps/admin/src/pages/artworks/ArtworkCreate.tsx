@@ -7,21 +7,10 @@ import { findRoute } from '../../utils/find-route';
 import { trpc } from '../../utils/trpc';
 
 export const ArtworkCreate = () => {
-  const trpcContext = trpc.useContext();
   const navigate = useNavigate();
 
   const createMutation = trpc.useMutation('artwork.createOne', {
     onSuccess: async (data) => {
-      await trpcContext.cancelQuery(['artwork.getAll']);
-      trpcContext.invalidateQueries(['product.getAllArtworks']);
-      const previousData = trpcContext.getQueryData(['artwork.getAll']);
-      if (previousData) {
-        trpcContext.setQueryData(['artwork.getAll'], {
-          ...previousData,
-          artworks: [data.artwork, ...previousData.artworks],
-        });
-      }
-
       SuccessToast({
         type: 'create',
         description: `L'oeuvre ${data.artwork.id} - ${data.artwork.name} a été créée.`,

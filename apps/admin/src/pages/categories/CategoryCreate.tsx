@@ -10,17 +10,6 @@ export const CategoryCreate = () => {
 
   const createMutation = trpc.useMutation(['category.createOne'], {
     onSuccess: async (data) => {
-      await trpcContext.cancelQuery(['category.getAll']);
-      trpcContext.invalidateQueries(['artwork.getCategoriesForSelect']);
-      
-      const previousData = trpcContext.getQueryData(['category.getAll']);
-      if (previousData) {
-        trpcContext.setQueryData(['category.getAll'], {
-          ...previousData,
-          categories: [data.category, ...previousData.categories],
-        });
-      }
-
       SuccessToast({
         type: 'create',
         description: `La catégorie ${data.category.id} - ${data.category.name} a été créée.`,

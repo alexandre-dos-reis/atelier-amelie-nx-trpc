@@ -52,7 +52,7 @@ export async function shopSeeds() {
           min: 1,
           max: 3,
         }),
-      }).map((empty) => {
+      }).map((_) => {
         const name = faker.random.words();
         return {
           name,
@@ -81,4 +81,21 @@ export async function shopSeeds() {
       }),
     });
   }
+
+  const products = await prisma.product.findMany();
+
+  const numberOfImages = faker.datatype.number({
+    min: 1,
+    max: 5,
+  });
+
+  products.forEach(async (p) => {
+    await prisma.productImage.createMany({
+      data: Array.from({ length: numberOfImages }).map((_) => ({
+        filename: faker.system.commonFileName('jpg'),
+        productId: p.id,
+        showInGallery: faker.helpers.arrayElement([true, false]),
+      })),
+    });
+  });
 }

@@ -35,24 +35,6 @@ model Category {
   artworks      Artwork[]
 }
 
-model Product {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  name           String
-  slug           String
-  description    String
-  height         Int?
-  width          Int?
-  stock          Int
-  price          Int
-  forSale        Boolean      @default(false)
-  artwork        Artwork      @relation(fields: [artworkId], references: [id])
-  artworkId      Int
-  shopCategory   ShopCategory @relation(fields: [shopCategoryId], references: [id])
-  shopCategoryId Int
-}
-
 model ShopCategory {
   id               Int            @id @default(autoincrement())
   updatedAt        DateTime       @updatedAt
@@ -65,6 +47,35 @@ model ShopCategory {
   products         Product[]
 }
 
+model Product {
+  id             Int            @id @default(autoincrement())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  name           String
+  slug           String
+  description    String
+  height         Int?
+  width          Int?
+  stock          Int
+  price          Int
+  forSale        Boolean        @default(false)
+  artwork        Artwork        @relation(fields: [artworkId], references: [id])
+  artworkId      Int
+  shopCategory   ShopCategory   @relation(fields: [shopCategoryId], references: [id])
+  shopCategoryId Int
+  productImage   ProductImage[]
+}
+
+model ProductImage {
+  id                  Int     @id @default(autoincrement())
+  showInGallery       Boolean @default(false)
+  filename            String
+  watermarkedFilename String?
+  designState         String?
+  product             Product @relation(fields: [productId], references: [id])
+  productId           Int
+}
+
 enum PURCHASE_STATUS {
   WAITING_FOR_PAYMENT
   IN_PREPARATION
@@ -75,7 +86,7 @@ enum PURCHASE_STATUS {
 }
 
 model Purchase {
-  id             String          @id @default(dbgenerated("uuid()"))
+  id             String          @id @default(uuid())
   stripeId       String
   purchaseAt     DateTime        @default(now())
   status         PURCHASE_STATUS
@@ -88,12 +99,12 @@ model Purchase {
 }
 
 model PurchaseItem {
-  id           Int       @id @default(autoincrement())
-  productName  String
-  quantity     Int
-  productPrice String
-  Purchase     Purchase? @relation(fields: [purchaseId], references: [id])
-  purchaseId   String?
+  id         Int      @id @default(autoincrement())
+  name       String
+  quantity   Int
+  price      Int
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+  purchaseId String
 }
 
 enum ADDRESS_TYPE {
@@ -103,16 +114,17 @@ enum ADDRESS_TYPE {
 }
 
 model Address {
-  id         Int          @id @default(autoincrement())
-  type       ADDRESS_TYPE
-  fullname   String
-  address    String
-  postalCode String
-  city       String
-  Country    String
-  Phone      String?
-  Purchase   Purchase     @relation(fields: [purchaseId], references: [id])
-  purchaseId String
+  id           Int          @id @default(autoincrement())
+  type         ADDRESS_TYPE
+  fullname     String
+  addressLine1 String
+  addressLine2 String?
+  postalCode   String
+  city         String
+  country      String
+  phone        String?
+  purchase     Purchase     @relation(fields: [purchaseId], references: [id])
+  purchaseId   String
 }
 
 model ShippingCost {
@@ -121,6 +133,8 @@ model ShippingCost {
   weightCost    Int
   insuranceCost Int
 }
+
+// ADMINISTRATION
 
 model AdminVariable {
   id    Int    @id @default(autoincrement())
