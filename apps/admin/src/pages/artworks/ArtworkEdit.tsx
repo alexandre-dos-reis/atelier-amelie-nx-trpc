@@ -37,7 +37,7 @@ export const ArtworkEdit = () => {
     },
     onError: (data, variables) => {
       ErrorToast({
-        description: `L'oeuvre ${variables} n'a pas été supprimée. Raison : ${data.message}`,
+        description: `L'oeuvre ${variables.id} n'a pas été supprimée. Raison : ${data.message}`,
       });
     },
   });
@@ -52,6 +52,7 @@ export const ArtworkEdit = () => {
         onSubmit={(data) => updateMutation.mutate(data)}
         artwork={{
           ...data.artwork,
+          file: '',
           categories: data.artwork.categories.map((c) => ({
             label: c.name,
             value: c.id,

@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom';
 interface CreateBtnProps {
   to: string;
   label: string;
+  colorScheme?: string;
 }
 
-export const CreateBtn = ({ to, label }: CreateBtnProps) => {
+export const CreateBtn = ({ to, label, colorScheme = 'blue' }: CreateBtnProps) => {
   return (
-    <Button as={Link} to={to}  colorScheme="blue">
+    <Button as={Link} to={to} colorScheme={colorScheme}>
       <AddIcon marginEnd="3" />
       {label}
     </Button>

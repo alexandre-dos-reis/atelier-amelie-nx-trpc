@@ -10,6 +10,7 @@ export const updateOrCreateOneSchema = z.object({
   madeAt: z.date().nullish(),
   showInGallery: z.boolean(),
   showInPortfolio: z.boolean(),
+  file: z.any(),
   categories: z
     .object({
       value: z.number(),

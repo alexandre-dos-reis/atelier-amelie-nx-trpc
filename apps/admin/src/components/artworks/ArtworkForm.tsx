@@ -6,6 +6,7 @@ import {
   CustomSelect as Select,
   CustomSwitch as Switch,
   CustomDatePicker as DatePicker,
+  CustomDropzone2 as Dropzone,
 } from '../form';
 import { artwork as schema } from '@atelier-amelie-nx-trpc/validation-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,6 +17,7 @@ import { BackBtn, SubmitBtn } from '../buttons';
 interface ArtworkFormProps {
   children?: ReactNode;
   bottomChildren?: ReactNode;
+  topChildren?: ReactNode;
   artwork: schema.updateOrCreateOneSchemaType;
   onSubmit: SubmitHandler<schema.updateOrCreateOneSchemaType>;
   textSubmitButton: string;
@@ -28,6 +30,7 @@ export const ArtworkForm = ({
   textSubmitButton,
   isLoading,
   children,
+  topChildren,
   bottomChildren,
 }: ArtworkFormProps) => {
   // Form
@@ -62,6 +65,9 @@ export const ArtworkForm = ({
 
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
+      {/* <Flex mb={gap + 5} mt={gap + 5} justify="space-between">
+        {topChildren}
+      </Flex> */}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
           <Flex w="full" gap={gap} justify="center">
@@ -94,6 +100,9 @@ export const ArtworkForm = ({
               options={categories}
               required
             />
+          </Flex>
+          <Flex w="full" gap={gap} justify="center">
+            <Dropzone c={c} name="file" />
           </Flex>
         </VStack>
         <Flex justifyContent="space-between" mt={gap + 5}>

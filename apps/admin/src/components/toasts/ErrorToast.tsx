@@ -1,18 +1,20 @@
-import { useToast } from '@chakra-ui/react';
+import { createStandaloneToast } from '@chakra-ui/react';
 
 interface ErrorToastProsp {
   description: string;
   title?: string;
 }
 
+const { ToastContainer, toast } = createStandaloneToast();
+
 export const ErrorToast = ({ title = 'Erreur !', description }: ErrorToastProsp) => {
-  const toast = useToast();
   toast({
     title,
     description,
     status: 'error',
-    duration: 10000,
+    duration: 5000,
     isClosable: true,
     position: 'top',
   });
+  return <ToastContainer />;
 };

@@ -36,6 +36,7 @@ export const ArtworkCreate = () => {
       artwork={{
         name: '',
         slug: '',
+        file: '',
         description: '',
         showInGallery: false,
         showInPortfolio: false,

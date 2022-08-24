@@ -43,3 +43,7 @@ docker-volumes
 
 # env
 .env
+
+# Seeds files
+prisma/seeds/files/**.jpg
+prisma/seeds/files/**.jpeg
