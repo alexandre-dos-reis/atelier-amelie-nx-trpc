@@ -7,14 +7,12 @@ interface CountCellProps {
 
 export const CountCell = ({ value, redAtZero = false }: CountCellProps) => {
   return (
-    <Flex align="center" justify="center">
-      <Tag
-        bgColor={redAtZero && value === 0 ? 'red.500' : 'gray.500'}
-        color="white"
-        textAlign="center"
-      >
-        {value}
-      </Tag>
-    </Flex>
+    <Tag
+      bgColor={redAtZero && value === 0 ? 'red.500' : 'gray.500'}
+      color="white"
+      textAlign="center"
+    >
+      {value}
+    </Tag>
   );
 };

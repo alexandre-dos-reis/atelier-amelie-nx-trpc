@@ -18,4 +18,6 @@ export * from './shop/subCategories/ShopSubCatsList';
 export * from './purchases/PurchasesList';
 
 export * from './settings/ShippingCostsList';
+export * from './settings/ShippingCostsEdit';
+
 export * from './settings/ConfigurationsList';

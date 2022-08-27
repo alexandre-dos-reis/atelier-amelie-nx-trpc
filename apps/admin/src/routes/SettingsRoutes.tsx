@@ -1,4 +1,4 @@
-import { ConfigurationsList, ShippingCostsList } from '../pages';
+import { ConfigurationsList, ShippingCostsEdit, ShippingCostsList } from '../pages';
 import { CustomRouteObject } from './custom-route-object.interface';
 
 export const SettingsRoutes: CustomRouteObject = {
@@ -8,7 +8,18 @@ export const SettingsRoutes: CustomRouteObject = {
     {
       path: 'shipping-cost',
       name: 'shipping-cost',
-      element: <ShippingCostsList />,
+      children: [
+        {
+          index: true,
+          name: 'list',
+          element: <ShippingCostsList />
+        },
+        {
+          path: ':id',
+          name: 'edit',
+          element: <ShippingCostsEdit/>
+        }
+      ]
     },
     {
       path: 'config',
