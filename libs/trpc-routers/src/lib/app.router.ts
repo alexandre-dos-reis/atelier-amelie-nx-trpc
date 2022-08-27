@@ -1,5 +1,14 @@
 import * as trpc from '@trpc/server';
-import { ArtworkRouter, CategoryRouter, ProductRouter } from './routers';
+import {
+  AdminVarRouter,
+  ArtworkRouter,
+  CategoryRouter,
+  ImageRouter,
+  ProductRouter,
+  PurchaseRouter,
+  ShippingCostRouter,
+  ShopCatRouter,
+} from './routers';
 import superjson from 'superjson';
 
 export const appRouter = trpc
@@ -8,7 +17,12 @@ export const appRouter = trpc
 
   .merge('artwork.', ArtworkRouter)
   .merge('category.', CategoryRouter)
-  .merge('product.', ProductRouter);
+  .merge('product.', ProductRouter)
+  .merge('shopCat.', ShopCatRouter)
+  .merge('productImage.', ImageRouter)
+  .merge('purchase.', PurchaseRouter)
+  .merge('shippingCost.', ShippingCostRouter)
+  .merge('adminVar.', AdminVarRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

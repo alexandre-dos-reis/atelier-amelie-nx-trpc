@@ -69,7 +69,7 @@ export const ProductEdit = () => {
         }}
       >
         <DeleteBtn onConfirm={() => deleteMutation.mutate({ id })}>
-          Etes-vous sûr de vouloir supprimer le produit <Text as="b">{data.product.name}</Text>?
+          Etes-vous sûr de vouloir supprimer le produit <Text as="b">{data.product.name}</Text> ? Toutes les photos associées seront également supprimées.
         </DeleteBtn>
       </ProductForm>
     );

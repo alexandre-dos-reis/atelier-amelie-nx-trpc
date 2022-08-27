@@ -1,5 +1,7 @@
+import { trpc } from "../../../../src/utils/trpc";
+
 export const ShopSubCatsList = () => {
-  return (
-    <div>ShopSubCatsList</div>
-  )
-}
+  const { data, isLoading, error } = trpc.useQuery(['shopCat.findAllChildrenCats']);
+
+  return <div>{JSON.stringify(data?.shopCategories)}</div>;
+};

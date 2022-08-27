@@ -17,7 +17,7 @@ export const CategoryRouter = trpc
           showInGallery: true,
           artworks: {
             select: {
-              id: true
+              id: true,
             },
           },
         },
