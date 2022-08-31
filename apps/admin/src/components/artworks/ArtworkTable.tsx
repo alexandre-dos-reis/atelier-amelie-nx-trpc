@@ -46,40 +46,7 @@ export const ArtworkTable = ({ data, isSuccess }: ArtworkTableProps) => {
         id: 'showInGallery',
         header: 'Publier ?',
         cell: memo((props) => {
-          const trpcContext = trpc.useContext();
-
-          const mutation = trpc.useMutation(['artwork.updateShowInGallery'], {
-            onMutate: async (variables) => {
-              await trpcContext.cancelQuery(['artwork.getAll']);
-              const previousData = trpcContext.getQueryData(['artwork.getAll']);
-
-              if (previousData) {
-                trpcContext.setQueryData(['artwork.getAll'], {
-                  ...previousData,
-                  artworks: previousData.artworks.map((a) =>
-                    a.id === variables.id ? { ...a, showInGallery: variables.isChecked } : a
-                  ),
-                });
-              }
-
-              await trpcContext.cancelQuery(['artwork.getOne', variables.id]);
-              const previousArtwork = trpcContext.getQueryData(['artwork.getOne', variables.id]);
-
-              if (previousArtwork) {
-                trpcContext.setQueryData(['artwork.getOne', variables.id], {
-                  ...previousArtwork,
-                  showInGallery: variables.isChecked,
-                });
-              }
-
-              return { previousData };
-            },
-            onError: (err, variables, context) => {
-              if (context?.previousData) {
-                trpcContext.setQueryData(['artwork.getAll'], context.previousData);
-              }
-            },
-          });
+          const mutation = trpc.useMutation(['artwork.updateShowInGallery']);
 
           const onChangeCallback = useCallback((isChecked: boolean) => {
             mutation.mutateAsync({

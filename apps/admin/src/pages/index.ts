@@ -16,6 +16,7 @@ export * from './shop/categories/ShopCatsList';
 export * from './shop/subCategories/ShopSubCatsList';
 
 export * from './purchases/PurchasesList';
+export * from './purchases/PurchaseEdit';
 
 export * from './settings/ShippingCostsList';
 export * from './settings/ShippingCostsEdit';

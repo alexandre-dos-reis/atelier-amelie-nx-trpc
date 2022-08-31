@@ -22,9 +22,9 @@ export function CustomTable<T>({ table }: CustomTableProps<T>) {
             </Tr>
           ))}
         </Thead>
-        <Tbody bg='whiteAlpha.300'>
+        <Tbody bg="whiteAlpha.300">
           {table.getRowModel().rows.map((row) => (
-            <Tr key={row.id} borderBottom='1px solid #dcdcdc'>
+            <Tr key={row.id} borderBottom="1px solid #dcdcdc">
               {row.getVisibleCells().map((cell) => (
                 <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>
               ))}

@@ -11,13 +11,31 @@ export const PurchaseRouter = trpc
         include: {
           _count: {
             select: {
-              items: true,
+              purchaseItems: true,
             },
           },
         },
       });
       return {
         purchases,
+      };
+    },
+  })
+
+  .query('getOne', {
+    input: z.string(),
+    async resolve({ input }) {
+      const purchase = await prisma.purchase.findFirstOrThrow({
+        where: {
+          id: input,
+        },
+        include: {
+          addresses: true,
+          purchaseItems: true,
+        },
+      });
+      return {
+        purchase,
       };
     },
   });

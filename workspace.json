@@ -7,6 +7,7 @@
     "api": "apps/api",
     "helpers": "libs/helpers",
     "prisma": "libs/prisma",
+    "purchase-service": "libs/purchase-service",
     "trpc-routers": "libs/trpc-routers",
     "validation-schema": "libs/validation-schema"
   }

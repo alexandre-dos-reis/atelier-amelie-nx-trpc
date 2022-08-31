@@ -29,6 +29,12 @@ export async function purchasesSeed() {
         status: faker.helpers.objectValue(PURCHASE_STATUS),
         stripeId: faker.datatype.uuid(),
         trackingNumber: faker.datatype.uuid(),
+        message: faker.random.words(
+          faker.datatype.number({
+            min: 20,
+            max: 50,
+          })
+        ),
         addresses: {
           createMany: {
             data: hasSingleAddress
@@ -68,7 +74,7 @@ export async function purchasesSeed() {
                 ],
           },
         },
-        items: {
+        purchaseItems: {
           createMany: {
             data: faker.helpers.arrayElements(products, itemsRange).map((p) => ({
               name: p.name,

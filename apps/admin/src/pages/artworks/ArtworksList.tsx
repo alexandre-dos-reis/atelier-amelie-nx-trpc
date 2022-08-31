@@ -4,11 +4,21 @@ import { Progress, Box } from '@chakra-ui/react';
 import { ArtworkTable } from '../../components/artworks/ArtworkTable';
 import { LayoutHeaderList } from '../../components/table';
 import { CreateBtn } from '../../components/buttons';
+import { InferQueryOutput } from '@atelier-amelie-nx-trpc/trpc-routers';
+import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 export const ArtworksList = () => {
   const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['artwork.getAll'], {
     keepPreviousData: true,
   });
+
+  type Query = InferQueryOutput<'artwork.getAll'>;
+  type ArtworkList = Query['artworks'];
+  type ArtworkListItem = ArtworkList[number];
+
+  const columnHelper = createColumnHelper<ArtworkListItem>();
+
+  
 
   if (isError) return <div>{error.message}</div>;
 

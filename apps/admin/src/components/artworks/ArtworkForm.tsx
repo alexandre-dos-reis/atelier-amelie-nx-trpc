@@ -65,9 +65,6 @@ export const ArtworkForm = ({
 
   return (
     <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
-      {/* <Flex mb={gap + 5} mt={gap + 5} justify="space-between">
-        {topChildren}
-      </Flex> */}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <VStack spacing={gap}>
           <Flex w="full" gap={gap} justify="center">

@@ -89,13 +89,14 @@ model Purchase {
   id             String          @id @default(uuid())
   stripeId       String
   purchaseAt     DateTime        @default(now())
+  message        String?
   status         PURCHASE_STATUS
   trackingNumber String
   email          String
   weightCost     Int
   insuranceCost  Int
   addresses      Address[]
-  items          PurchaseItem[]
+  purchaseItems  PurchaseItem[]
 }
 
 model PurchaseItem {

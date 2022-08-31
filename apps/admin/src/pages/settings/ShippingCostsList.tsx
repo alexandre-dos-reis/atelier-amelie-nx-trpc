@@ -21,9 +21,12 @@ export const ShippingCostsList = () => {
       columnHelper.accessor('max', {
         header: 'Palier',
         cell: (props) => (
-          <LinkCell to={findRoute(`settings.shipping-cost.edit`, props.row.original.id)} fontSize="sm">
-              {props.getValue()}
-            </LinkCell>
+          <LinkCell
+            to={findRoute(`settings.shipping-cost.edit`, props.row.original.id)}
+            fontSize="sm"
+          >
+            {props.getValue()}
+          </LinkCell>
         ),
       }),
       columnHelper.accessor('insuranceCost', {

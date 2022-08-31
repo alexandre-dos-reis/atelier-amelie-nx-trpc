@@ -1,6 +1,7 @@
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '@atelier-amelie-nx-trpc/prisma';
+import { shippingCost } from '@atelier-amelie-nx-trpc/validation-schema';
 
 export const ShippingCostRouter = trpc
   .router()
@@ -16,4 +17,37 @@ export const ShippingCostRouter = trpc
         shippingCosts,
       };
     },
-  });
+  })
+
+  .query('getOne', {
+    input: z.object({
+      id: z.number(),
+    }),
+    async resolve({ input }) {
+      const shippingCost = await prisma.shippingCost.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+      return {
+        shippingCost,
+      };
+    },
+  })
+
+  .mutation('updateOne', {
+    input: shippingCost.updateOrCreateOneSchema,
+    async resolve({ input }) {
+      const shippingCost = await prisma.shippingCost.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...input,
+        },
+      });
+      return {
+        shippingCost,
+      };
+    },
+  })
