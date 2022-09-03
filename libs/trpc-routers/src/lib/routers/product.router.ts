@@ -114,8 +114,8 @@ export const ProductRouter = trpc
         },
         orderBy: {
           parentCategory: {
-            name: 'asc'
-          }
+            name: 'asc',
+          },
         },
       });
 
@@ -138,6 +138,23 @@ export const ProductRouter = trpc
       });
       return {
         artworks,
+      };
+    },
+  })
+
+  .mutation('updateForSale', {
+    input: product.updateForSaleSchema,
+    async resolve({ input }) {
+      const product = await prisma.product.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          forSale: input.isChecked,
+        },
+      });
+      return {
+        product,
       };
     },
   })

@@ -11,9 +11,9 @@ export const findRoute = (string: string, param?: string | number): string => {
     const matchedRoute: CustomRouteObject | undefined = currentRoutes?.find((r) => r.name === n);
 
     if (matchedRoute?.path?.startsWith(':')) {
-      if (Array.isArray(param)){
+      if (Array.isArray(param)) {
         res += '/' + param[paramCounter];
-        paramCounter += 1
+        paramCounter += 1;
       } else {
         res += '/' + param;
       }

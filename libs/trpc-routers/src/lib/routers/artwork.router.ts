@@ -77,8 +77,7 @@ export const ArtworkRouter = trpc
   .mutation('updateOne', {
     input: artwork.updateOrCreateOneSchema,
     async resolve({ input }) {
-
-      console.log(input)
+      console.log(input);
 
       const artwork = await prisma.artwork.update({
         where: {

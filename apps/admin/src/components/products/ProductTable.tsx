@@ -62,10 +62,19 @@ export const ProductTable = ({ data, isSuccess }: ProductTableProps) => {
         id: 'forSale',
         header: 'En vente ?',
         cell: memo((props) => {
+          const mutation = trpc.useMutation(['product.updateForSale']);
+
+          const onChangeCallback = useCallback((isChecked: boolean) => {
+            mutation.mutateAsync({
+              id: props.row.original.id,
+              isChecked,
+            });
+          }, []);
+
           return (
             <SwitchCell
               initialIsChecked={props.row.original.forSale}
-              onChangeCallback={(isChecked) => console.log(isChecked)}
+              onChangeCallback={onChangeCallback}
             />
           );
         }),

@@ -1,6 +1,6 @@
 import { ucFirst } from '@atelier-amelie-nx-trpc/helpers';
 import { getAddress, getStatus } from '@atelier-amelie-nx-trpc/purchase-service';
-import { Box, Flex, Heading, Stack, VStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Stack, VStack, Text, Progress } from '@chakra-ui/react';
 import { Address } from '@prisma/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trpc } from '../../utils/trpc';
@@ -13,8 +13,9 @@ export const PurchaseEdit = () => {
   const { data, isLoading, isError, isSuccess, error } = trpc.useQuery(['purchase.getOne', id]);
 
   const gap = 5;
-
-  if (data) {
+  if (!isSuccess && !data) {
+    return <Progress size="md" isIndeterminate />;
+  } else {
     return (
       <Box bg={'whiteAlpha.000'} rounded={'sm'} px={7} mt={gap}>
         <Stack spacing={8} direction="row">
@@ -63,6 +64,14 @@ export const PurchaseEdit = () => {
             )}
           </Box>
         </Stack>
+        {data.purchase.message !== '' && (
+          <Stack>
+            <Box p={5} shadow="md" borderWidth="1px" bg="white" flex="1" px={7} mt={gap}>
+              <Heading fontSize="xl">Message de l'acheteur</Heading>
+              <Text>{data.purchase.message}</Text>
+            </Box>
+          </Stack>
+        )}
         <Stack>
           <Box p={5} shadow="md" borderWidth="1px" bg="white" flex="1" px={7} mt={gap}>
             <Heading fontSize="xl">Produit(s) commandé(s)</Heading>
@@ -87,8 +96,6 @@ export const PurchaseEdit = () => {
         </Stack>
       </Box>
     );
-  } else {
-    return <></>;
   }
 };
 
