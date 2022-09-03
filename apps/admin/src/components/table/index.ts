@@ -6,3 +6,4 @@ export * from './LinkCell';
 export * from './CountCell';
 export * from './DraggableRow';
 export * from './useReorderRow';
+export * from './CustomDragTable';

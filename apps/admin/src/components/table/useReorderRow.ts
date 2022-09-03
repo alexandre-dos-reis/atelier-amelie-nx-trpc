@@ -1,32 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type ListItem = { id: number; disposition: number };
 
-export function useReorderRow<T>(
-  data: (T & ListItem)[],
-  cb: (listItems: ListItem[]) => void
-): [(T & ListItem)[], (draggedRowIndex: number, targetRowIndex: number) => void] {
-  const [dataTable, setData] = useState<(T & ListItem)[]>(data);
+export function useReorderRow<T extends ListItem>(
+  data: T[],
+  cb: (listItems: T[]) => void
+): [T[], (draggedRowIndex: number, targetRowIndex: number) => void] {
+  const [controlledData, setControlledData] = useState<T[]>(data);
 
   function reorderRow(draggedRowIndex: number, targetRowIndex: number) {
-    data.splice(targetRowIndex, 0, data.splice(draggedRowIndex, 1)[0] as T & ListItem);
+    data.splice(targetRowIndex, 0, data.splice(draggedRowIndex, 1)[0]);
 
-    const newDisposition = data.map((c, i) => ({
-      id: c.id,
-      disposition: i + 1,
-    }));
-
-    setData([
+    setControlledData([
       ...data.map((c, i) => ({
         ...c,
         disposition: i + 1,
       })),
     ]);
-
-    cb(newDisposition);
-
-    // return newDisposition;
   }
 
-  return [dataTable, reorderRow];
+  useEffect(() => {
+    cb(controlledData);
+  }, [controlledData]);
+
+  return [controlledData, reorderRow];
 }

@@ -5,8 +5,15 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { FC, useMemo, useState } from 'react';
-import { CountCell, DraggableRow, LinkCell, SwitchCell, useReorderRow } from '../table';
+import { useMemo } from 'react';
+import {
+  CountCell,
+  CustomDragTable,
+  DraggableRow,
+  LinkCell,
+  SwitchCell,
+  useReorderRow,
+} from '../table';
 import { findRoute } from '../../utils/find-route';
 import { trpc } from '../../utils/trpc';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -26,7 +33,6 @@ interface CategoryTableProps {
 }
 
 export const CategoryTable = ({ data }: CategoryTableProps) => {
-  // const [dataTable, setData] = useState<categoryListItem[]>(data);
   const columnHelper = createColumnHelper<categoryListItem>();
 
   const columns = useMemo(
@@ -64,44 +70,16 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
 
   const reorderMutation = trpc.useMutation('category.reOrder');
 
-  const [dataTable, reorderRow] = useReorderRow(data, (newOrder) =>
-    reorderMutation.mutate(newOrder)
-  );
+  const [controlledData, reorderRow] = useReorderRow(data, (newOrder) => {
+    reorderMutation.mutate(newOrder);
+  });
 
   const table = useReactTable({
     columns,
-    data: dataTable as categoryListItem[],
+    data: controlledData,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.id.toString(),
   });
 
-  const [animationParent] = useAutoAnimate<HTMLTableSectionElement>();
-
-  return (
-    <TableContainer overflowX="unset" overflowY="unset">
-      <Table size="sm" variant="unstyled" position="relative">
-        <Thead position="sticky" top="0" zIndex="sticky" bg="white">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              <Th>
-                <IoHandRight />
-              </Th>
-              {headerGroup.headers.map((header) => (
-                <Th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-        <Tbody ref={animationParent} bg="whiteAlpha.300">
-          {table.getRowModel().rows.map((row) => (
-            <DraggableRow key={row.id} row={row} reorderRow={reorderRow} />
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
-  );
+  return <CustomDragTable reorderRow={reorderRow} table={table} />;
 };
