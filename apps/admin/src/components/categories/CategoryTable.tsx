@@ -1,16 +1,13 @@
-import { Table, Tbody, Thead, TableContainer, Td, Tr, Th } from '@chakra-ui/react';
+import { Table, Tbody, Thead, TableContainer, Tr, Th } from '@chakra-ui/react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  Row,
   useReactTable,
 } from '@tanstack/react-table';
 import { FC, useMemo, useState } from 'react';
-import { CountCell, LinkCell, SwitchCell } from '../table';
+import { CountCell, DraggableRow, LinkCell, SwitchCell, useReorderRow } from '../table';
 import { findRoute } from '../../utils/find-route';
-import { DragHandleIcon } from '@chakra-ui/icons';
-import { useDrag, useDrop } from 'react-dnd';
 import { trpc } from '../../utils/trpc';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { IoHandRight } from 'react-icons/io5';
@@ -28,43 +25,8 @@ interface CategoryTableProps {
   data: categoryListItem[];
 }
 
-const DraggableRow: FC<{
-  row: Row<categoryListItem>;
-  reorderRow: (draggedRowIndex: number, targetRowIndex: number) => void;
-}> = ({ row, reorderRow }) => {
-  const [, dropRef] = useDrop({
-    accept: 'row',
-    drop: (draggedRow: Row<categoryListItem>) => reorderRow(draggedRow.index, row.index),
-  });
-
-  const [{ isDragging }, dragRef, previewRef] = useDrag({
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    item: () => row,
-    type: 'row',
-  });
-
-  return (
-    <Tr
-      ref={previewRef} //previewRef could go here
-      borderBottom="1px solid #dcdcdc"
-      style={{ opacity: isDragging ? 0.5 : 1 }}
-    >
-      <Td ref={dropRef}>
-        <button ref={dragRef}>
-          <DragHandleIcon cursor="grab" _active={{ cursor: 'grabbing' }} />
-        </button>
-      </Td>
-      {row.getVisibleCells().map((cell) => (
-        <Td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</Td>
-      ))}
-    </Tr>
-  );
-};
-
 export const CategoryTable = ({ data }: CategoryTableProps) => {
-  const [dataTable, setData] = useState<categoryListItem[]>(data);
+  // const [dataTable, setData] = useState<categoryListItem[]>(data);
   const columnHelper = createColumnHelper<categoryListItem>();
 
   const columns = useMemo(
@@ -100,32 +62,18 @@ export const CategoryTable = ({ data }: CategoryTableProps) => {
     []
   );
 
+  const reorderMutation = trpc.useMutation('category.reOrder');
+
+  const [dataTable, reorderRow] = useReorderRow(data, (newOrder) =>
+    reorderMutation.mutate(newOrder)
+  );
+
   const table = useReactTable({
     columns,
-    data: dataTable,
+    data: dataTable as categoryListItem[],
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.id.toString(),
   });
-
-  const reorderMutation = trpc.useMutation('category.reOrder');
-
-  const reorderRow = (draggedRowIndex: number, targetRowIndex: number) => {
-    data.splice(targetRowIndex, 0, data.splice(draggedRowIndex, 1)[0] as categoryListItem);
-
-    const newDisposition = data.map((c, i) => ({
-      id: c.id,
-      disposition: i + 1,
-    }));
-
-    setData([
-      ...data.map((c, i) => ({
-        ...c,
-        disposition: i + 1,
-      })),
-    ]);
-
-    reorderMutation.mutate(newDisposition);
-  };
 
   const [animationParent] = useAutoAnimate<HTMLTableSectionElement>();
 
