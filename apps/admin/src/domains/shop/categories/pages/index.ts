@@ -1,1 +1,2 @@
-export * from './ShopCatsList'
+export * from './ParentCategoriesList'
+export * from './ChildrenCategoriesList'

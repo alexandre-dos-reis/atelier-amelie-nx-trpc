@@ -14,6 +14,10 @@ export const allRoutes: CustomRouteObject[] = [
   ShopRoutes,
   PurchasesRoutes,
   SettingsRoutes,
+  {
+    path: '*',
+    element: <div>NOT FOUND !</div>
+  }
 ];
 
-export const RouterComponent = () => useRoutes(allRoutes);
+export const RootRouterComponent = () => useRoutes(allRoutes);

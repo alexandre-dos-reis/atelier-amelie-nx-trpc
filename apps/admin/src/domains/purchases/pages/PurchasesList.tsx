@@ -12,9 +12,7 @@ export const PurchasesList = () => {
   const { data, isLoading, isError, error, isSuccess } = trpc.useQuery(['purchase.findAll']);
   const memoedData = useMemo(() => data?.purchases, [isSuccess]);
 
-  type Query = InferQueryOutput<'purchase.findAll'>;
-  type ShippingCostList = Query['purchases'];
-  type ShippingCostListItem = ShippingCostList[number];
+  type ShippingCostListItem = InferQueryOutput<'purchase.findAll'>['purchases'][number];
   const columnHelper = createColumnHelper<ShippingCostListItem>();
 
   const columns = useMemo(

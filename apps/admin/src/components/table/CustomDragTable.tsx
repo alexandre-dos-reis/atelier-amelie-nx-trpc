@@ -1,6 +1,8 @@
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { flexRender, Table as ReactTable } from '@tanstack/react-table';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { IoHandRight } from 'react-icons/io5';
 import { DraggableRow } from './DraggableRow';
 
@@ -13,6 +15,7 @@ export function CustomDragTable<T>({ table, reorderRow }: CustomDragTableProps<T
   const [animationParent] = useAutoAnimate<HTMLTableSectionElement>();
 
   return (
+    <DndProvider backend={HTML5Backend}>
     <TableContainer overflowX="unset" overflowY="unset">
       <Table size="sm" variant="unstyled" position="relative">
         <Thead position="sticky" top="0" zIndex="sticky" bg="white">
@@ -38,5 +41,6 @@ export function CustomDragTable<T>({ table, reorderRow }: CustomDragTableProps<T
         </Tbody>
       </Table>
     </TableContainer>
+    </DndProvider>
   );
 }

@@ -33,4 +33,20 @@ export const ShopCatRouter = trpc
         shopCategories,
       };
     },
-  });
+  })
+
+  .query('findOne', {
+    input: z.object({
+      id: z.number().positive(),
+    }),
+    async resolve({ input }) {
+      const category = await prisma.shopCategory.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+      return {
+        category,
+      };
+    },
+  })

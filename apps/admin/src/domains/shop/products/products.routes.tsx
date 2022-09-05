@@ -7,6 +7,7 @@ export const productsRoutes: CustomRouteObject = {
     children: [
       {
         index: true,
+        name: 'list',
         element: <ProductsList />,
       },
       {
@@ -15,7 +16,7 @@ export const productsRoutes: CustomRouteObject = {
         element: <ProductEdit />,
       },
       {
-        path: 'create',
+        path: 'creation',
         name: 'create',
         element: <ProductCreate />,
       },

@@ -23,5 +23,5 @@ export function useReorderRow<T extends ListItem>(
     cb(controlledData);
   }, [controlledData]);
 
-  return [controlledData, reorderRow];
+  return [controlledData.length === 0 ? data : controlledData, reorderRow];
 }

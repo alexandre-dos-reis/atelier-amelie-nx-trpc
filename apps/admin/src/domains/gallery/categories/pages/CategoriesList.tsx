@@ -2,8 +2,6 @@ import { Box, Progress } from '@chakra-ui/react';
 import { trpc, findRoute } from 'utils';
 import { CategoryTable } from '../components/CategoryTable';
 import { LayoutHeaderList } from 'components/table';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { CreateBtn } from 'components/buttons';
 
 export const CategoriesList = () => {
@@ -26,14 +24,12 @@ export const CategoriesList = () => {
         </Box>
       )}
       {isSuccess && data.categories.length !== 0 && (
-        <DndProvider backend={HTML5Backend}>
           <CategoryTable
             data={data.categories.map((c) => ({
               ...c,
               artworksLength: c.artworks.length,
             }))}
           />
-        </DndProvider>
       )}
     </>
   );

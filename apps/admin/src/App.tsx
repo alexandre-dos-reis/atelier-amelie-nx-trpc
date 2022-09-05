@@ -1,11 +1,13 @@
 import { trpc } from './utils/trpc';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Grid } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
-import { Layout } from './components/layout';
 import superjson from 'superjson';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { Navbar } from 'components/layout/Navbar';
+import { Main } from 'components/layout/Main';
+import { Header } from 'components/layout/Header';
 
 export const App = () => {
   const [queryClient] = useState(
@@ -30,7 +32,19 @@ export const App = () => {
       <QueryClientProvider client={queryClient}>
         <ChakraProvider>
           <BrowserRouter>
-            <Layout />
+            <Grid
+              maxW="full"
+              h="100vh"
+              templateAreas={`"nav header"
+                      "nav main"`}
+              gridTemplateRows={'1fr 9fr'}
+              gridTemplateColumns={'1fr 5fr'}
+              overflowY={'hidden'}
+            >
+              <Navbar />
+              <Header />
+              <Main />
+            </Grid>
           </BrowserRouter>
         </ChakraProvider>
         <ReactQueryDevtools initialIsOpen={false} />
