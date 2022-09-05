@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { findRoute } from '../../utils/find-route';
+import { findRoute } from 'utils';
 import {
   Flex,
   Link as ChakraLink,
@@ -69,8 +69,8 @@ export const Navbar = () => {
       />
 
       <NavLabel label="GALERIE" />
-      <NavItem label="Oeuvres" icon={FaPalette} route={findRoute('artworks')} />
-      <NavItem label="Catégories" icon={MdCategory} route={findRoute('categories')} />
+      <NavItem label="Oeuvres" icon={FaPalette} route={findRoute('gallery.artworks')} />
+      <NavItem label="Catégories" icon={MdCategory} route={findRoute('gallery.categories')} />
 
       <NavLabel label="BOUTIQUE" />
       <NavItem label="Produits" icon={FaGift} route={findRoute('shop.products')} />

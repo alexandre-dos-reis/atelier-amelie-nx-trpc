@@ -2,7 +2,19 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "components/*": ["src/components/*"],
+      "utils": ["src/utils/index.ts"],
+      "store/*": ["src/store/*"],
+      "@atelier-amelie-nx-trpc/helpers": ["../../libs/helpers/src/index.ts"],
+      "@atelier-amelie-nx-trpc/prisma": ["../../libs/prisma/src/index.ts"],
+      "@atelier-amelie-nx-trpc/purchase-service": ["../../libs/purchase-service/src/index.ts"],
+      "@atelier-amelie-nx-trpc/trpc-routers": ["../../libs/trpc-routers/src/index.ts"],
+      "@atelier-amelie-nx-trpc/validation-schema": ["../../libs/validation-schema/src/index.ts"],
+
+    }
   },
   "files": [
     "../../node_modules/@nrwl/react/typings/cssmodule.d.ts",

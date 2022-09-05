@@ -1,6 +1,6 @@
 import { GridItem, useColorModeValue } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { RouterComponent as Router} from '../../routes/RouterComponent';
+import { RouterComponent as Router} from '../../domains/RootRouter';
 
 export const Main = () => {
   const [animationParent] = useAutoAnimate<HTMLDivElement>();
