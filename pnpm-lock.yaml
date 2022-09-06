@@ -10,6 +10,7 @@ specifiers:
   '@hookform/resolvers': ^2.9.7
   '@nrwl/cli': 14.5.1
   '@nrwl/cypress': 14.5.1
+  '@nrwl/devkit': 14.5.1
   '@nrwl/eslint-plugin-nx': 14.5.1
   '@nrwl/express': 14.5.1
   '@nrwl/jest': 14.5.1
@@ -120,6 +121,7 @@ devDependencies:
   '@faker-js/faker': 7.3.0
   '@nrwl/cli': 14.5.1
   '@nrwl/cypress': 14.5.1_dfadx4jlem4ej3jq2oufjiehha
+  '@nrwl/devkit': 14.5.1_nx@14.5.1
   '@nrwl/eslint-plugin-nx': 14.5.1_4kbagxxlc5a3nkunsnbjipcrrq
   '@nrwl/express': 14.5.1_qd7mcqg7aeoq3qilmo3fdrg5u4
   '@nrwl/jest': 14.5.1_2kzxkvok3o2baf7jya2usinr4y

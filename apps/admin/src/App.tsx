@@ -36,7 +36,7 @@ export const App = () => {
               maxW="full"
               h="100vh"
               templateAreas={`"nav header"
-                      "nav main"`}
+                              "nav main"`}
               gridTemplateRows={'1fr 9fr'}
               gridTemplateColumns={'1fr 5fr'}
               overflowY={'hidden'}
