@@ -1,7 +1,7 @@
 import { CustomRouteObject } from 'utils';
 import { CategoriesList, CategoryCreate, CategoryEdit } from './pages';
 
-export const CategoriesRoutes: CustomRouteObject = {
+export const categoriesRoutes: CustomRouteObject = {
   path: 'categories',
   name: 'categories',
   children: [

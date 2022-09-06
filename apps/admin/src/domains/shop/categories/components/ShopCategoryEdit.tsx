@@ -14,15 +14,16 @@ export const CatEdit = () => {
 
   if (!isLoading && data) {
     return (
-      <CategoryForm
-        textSubmitButton="Mettre à jour"
-        onSubmit={(data) => console.log(data)}
-        category={data.category}
-      >
-        <Button colorScheme="red" onClick={() => console.log({ id })}>
-          Supprimer
-        </Button>
-      </CategoryForm>
+      <div>form</div>
+      // <CategoryForm
+      //   textSubmitButton="Mettre à jour"
+      //   onSubmit={(data) => console.log(data)}
+      //   category={data.category}
+      // >
+      //   <Button colorScheme="red" onClick={() => console.log({ id })}>
+      //     Supprimer
+      //   </Button>
+      // </CategoryForm>
     );
   } else {
     return <ProgressBar />;

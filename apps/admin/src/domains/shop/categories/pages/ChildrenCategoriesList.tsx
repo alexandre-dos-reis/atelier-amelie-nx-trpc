@@ -1,7 +1,3 @@
-import { trpc } from "utils";
+import { ShopCategoryList } from '../components';
 
-export const ChildrenCategoriesList = () => {
-  const { data, isLoading, error } = trpc.useQuery(['shopCat.findAllChildrenCats']);
-
-  return <div>{JSON.stringify(data?.shopCategories)}</div>;
-};
+export const ChildrenCategoriesList = () => <ShopCategoryList selectParent={false} />;

@@ -75,8 +75,8 @@ export const Navbar = () => {
       <NavLabel label="BOUTIQUE" />
       <NavItem label="Produits" icon={FaGift} route={findRoute('shop.products')} />
       <NavItem label="Images" icon={FaRegImage} route={findRoute('shop.products.images')} />
-      <NavItem label="Sous-catégories" icon={FaTags} route={findRoute('shop.sub-categories')} />
-      <NavItem label="Catégories" icon={FaTag} route={findRoute('shop.categories')} />
+      <NavItem label="Sous-catégories" icon={FaTags} route={findRoute('shop.categories.children-list')} />
+      <NavItem label="Catégories" icon={FaTag} route={findRoute('shop.categories.parent-list')} />
 
       <NavLabel label="VENTES" />
       <NavItem label="Commandes" icon={FaShoppingCart} route={findRoute('purchases')} />

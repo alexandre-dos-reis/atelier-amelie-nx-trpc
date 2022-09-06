@@ -6,27 +6,19 @@ export const ShopCatRouter = trpc
   .router()
 
   .query('findAllParentCats', {
-    async resolve() {
+    input: z.object({
+      selectParent: z.boolean(),
+    }),
+    async resolve({ input }) {
       const shopCategories = await prisma.shopCategory.findMany({
         where: {
-          parentCategoryId: {
-            equals: null,
-          },
-        },
-      });
-      return {
-        shopCategories,
-      };
-    },
-  })
-
-  .query('findAllChildrenCats', {
-    async resolve() {
-      const shopCategories = await prisma.shopCategory.findMany({
-        where: {
-          parentCategoryId: {
-            not: null,
-          },
+          parentCategoryId: input.selectParent
+            ? {
+                equals: null,
+              }
+            : {
+                not: null,
+              },
         },
       });
       return {
@@ -49,4 +41,4 @@ export const ShopCatRouter = trpc
         category,
       };
     },
-  })
+  });

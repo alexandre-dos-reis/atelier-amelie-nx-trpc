@@ -1,19 +1,19 @@
 import { useRoutes } from 'react-router-dom';
 import { CustomRouteObject } from 'utils';
-import { HomeRoutes } from './home/HomeRoutes';
-import { ShopRoutes } from './shop/ShopRoutes';
-import { CategoriesRoutes } from './gallery/categories/categories.routes';
-import { PurchasesRoutes } from './purchases/PurchasesRoutes';
-import { SettingsRoutes } from './settings/SettingsRoutes';
+import { homeRoutes } from './home/HomeRoutes';
+import { shopRoutes } from './shop/shop.routes';
+import { categoriesRoutes } from './gallery/categories/categories.routes';
+import { purchasesRoutes } from './purchases/purchases.routes';
+import { settingsRoutes } from './settings/settings.routes';
 import { galleryRoutes } from './gallery/gallery.routes';
 
 export const allRoutes: CustomRouteObject[] = [
-  HomeRoutes,
+  homeRoutes,
   galleryRoutes,
-  CategoriesRoutes,
-  ShopRoutes,
-  PurchasesRoutes,
-  SettingsRoutes,
+  categoriesRoutes,
+  shopRoutes,
+  purchasesRoutes,
+  settingsRoutes,
   {
     path: '*',
     element: <div>NOT FOUND !</div>

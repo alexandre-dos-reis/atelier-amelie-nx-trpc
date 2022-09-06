@@ -1,23 +1,18 @@
 import { CustomRouteObject } from 'utils';
 import { ChildrenCategoriesList, ParentCategoriesList } from './pages';
 
-export const parentCategoriesRoutes: CustomRouteObject = {
+export const shopCategoriesRoutes: CustomRouteObject = {
   path: 'categories',
   name: 'categories',
   children: [
     {
-      index: true,
+      name: 'parent-list',
+      path: 'parents',
       element: <ParentCategoriesList />,
     },
-  ],
-};
-
-export const childrenCategoriesRoutes: CustomRouteObject = {
-  path: 'sous-categories',
-  name: 'sub-categories',
-  children: [
     {
-      index: true,
+      name: 'children-list',
+      path: 'enfants',
       element: <ChildrenCategoriesList />,
     },
   ],

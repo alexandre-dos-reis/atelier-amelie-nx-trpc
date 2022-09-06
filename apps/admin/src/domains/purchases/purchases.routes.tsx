@@ -1,7 +1,7 @@
 import { PurchasesList, PurchaseEdit } from './pages';
 import { CustomRouteObject } from 'utils';
 
-export const PurchasesRoutes: CustomRouteObject = {
+export const purchasesRoutes: CustomRouteObject = {
   path: 'achats',
   name: 'purchases',
   children: [
