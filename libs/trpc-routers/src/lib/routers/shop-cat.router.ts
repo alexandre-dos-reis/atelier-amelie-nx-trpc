@@ -5,20 +5,29 @@ import { prisma } from '@atelier-amelie-nx-trpc/prisma';
 export const ShopCatRouter = trpc
   .router()
 
-  .query('findAllParentCats', {
+  .query('findAllParentCategories', {
+    async resolve() {
+      const shopCategories = await prisma.shopCategory.findMany({
+        where: {
+          parentCategoryId: {
+            equals: null,
+          },
+        },
+      });
+      return {
+        shopCategories,
+      };
+    },
+  })
+
+  .query('findChildrenCategoriesByParentId', {
     input: z.object({
-      selectParent: z.boolean(),
+      parentId: z.number().positive(),
     }),
     async resolve({ input }) {
       const shopCategories = await prisma.shopCategory.findMany({
         where: {
-          parentCategoryId: input.selectParent
-            ? {
-                equals: null,
-              }
-            : {
-                not: null,
-              },
+          parentCategoryId: input.parentId,
         },
       });
       return {

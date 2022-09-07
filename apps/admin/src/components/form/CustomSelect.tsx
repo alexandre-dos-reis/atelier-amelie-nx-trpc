@@ -2,7 +2,7 @@ import { FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { Controller, Control, Path, PathValue } from 'react-hook-form';
 import Select, { GroupBase, OptionsOrGroups, StylesConfig } from 'react-select';
 import chroma from 'chroma-js';
-import { colourOptions } from '../../utils/colours-options';
+import { colourOptions } from 'utils';
 
 interface InputProps<T> {
   c: Control<T>;
@@ -33,7 +33,7 @@ export function CustomSelect<T>({
           multiValue: (styles, { index }) => {
             return {
               ...styles,
-              backgroundColor: chroma(colourOptions[(index) % colourOptions.length].color)
+              backgroundColor: chroma(colourOptions[index % colourOptions.length].color)
                 .alpha(0.1)
                 .css(),
             };

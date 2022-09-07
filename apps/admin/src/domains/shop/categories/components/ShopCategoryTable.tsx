@@ -10,10 +10,7 @@ interface shopCategoryListProps {
 }
 
 export const ShopCategoryList = ({ selectParent }: shopCategoryListProps) => {
-  const { data, isLoading, isSuccess } = trpc.useQuery([
-    'shopCat.findAllParentCats',
-    { selectParent },
-  ]);
+  const { data, isLoading, isSuccess } = trpc.useQuery(['shopCat.findAllParentCategories']);
 
   const memoedCategories = useMemo(() => data?.shopCategories ?? [], [isSuccess]);
   const columnHelper = createColumnHelper<NonNullable<typeof data>['shopCategories'][number]>();
@@ -52,11 +49,13 @@ export const ShopCategoryList = ({ selectParent }: shopCategoryListProps) => {
     <>
       <LayoutHeaderList headingText="Liste des catégories de la boutique">{''}</LayoutHeaderList>
       {isLoading && <ProgressBar />}
-      {isSuccess && data.shopCategories.length === 0 ? (
+      {isSuccess && data.shopCategories.length === 0 && (
         <Box w="full" textAlign="center" m="7">
           Il n'y a aucune catégories pour l'instant.
         </Box>
-      ) : (
+      )}
+
+      {isSuccess && data.shopCategories.length !== 0 && (
         <CustomDragTable reorderRow={reorderRow} table={table} />
       )}
     </>

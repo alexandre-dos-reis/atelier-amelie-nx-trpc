@@ -3,7 +3,7 @@ import { ProgressBar } from 'components/progress-bar';
 import { useNavigate, useParams } from 'react-router-dom';
 import { trpc } from 'utils';
 
-export const CatEdit = () => {
+export const ShopCategoryEdit = () => {
   const params = useParams();
   const id = parseInt(params['id'] as string);
   const navigate = useNavigate();
