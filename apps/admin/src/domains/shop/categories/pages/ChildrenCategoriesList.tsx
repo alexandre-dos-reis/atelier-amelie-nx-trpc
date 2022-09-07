@@ -16,13 +16,17 @@ export const ChildrenCategoriesList = () => {
 
   const parentCats = trpc.useQuery(['shopCat.findAllParentCategories']);
 
-  const { data, isLoading, isSuccess } = trpc.useQuery([
-    'shopCat.findChildrenCategoriesByParentId',
-    {
-      parentId:
-        (choosenCategory?.value as number) || (parentCats.data?.shopCategories[0].id as number),
-    },
-  ]);
+  // Essayer d'encapsuler dans des composants...
+
+  const { data, isLoading, isSuccess } = trpc.useQuery(
+    [
+      'shopCat.findChildrenCategoriesByParentId',
+      {
+        parentId:
+          (choosenCategory?.value as number) || (parentCats.data?.shopCategories[0].id as number),
+      },
+    ],
+  );
 
   const handleSelectChange = (value: SingleValue<SelectItem>) => {
     setChoosenCategory(value);

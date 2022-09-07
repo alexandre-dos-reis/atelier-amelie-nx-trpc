@@ -137,8 +137,12 @@ model ShippingCost {
 
 // ADMINISTRATION
 
+enum VAR_KEY {
+  CGV
+}
+
 model AdminVariable {
   id    Int    @id @default(autoincrement())
-  key   String @unique
+  key   VAR_KEY
   value String
 }

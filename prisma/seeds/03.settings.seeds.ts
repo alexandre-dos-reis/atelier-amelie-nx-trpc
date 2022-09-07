@@ -26,7 +26,7 @@ export async function settingsSeed() {
   // App Variables
   await prisma.adminVariable.create({
     data: {
-      key: 'cgv',
+      key: 'CGV',
       value: '<div>CGV</div>',
     },
   });

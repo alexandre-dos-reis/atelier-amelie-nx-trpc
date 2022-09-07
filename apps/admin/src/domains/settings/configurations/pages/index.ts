@@ -1,1 +1,2 @@
-export * from './ConfigurationsList'
+export * from './ConfigList'
+export * from './ConfigEdit'

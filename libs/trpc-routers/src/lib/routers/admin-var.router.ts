@@ -12,4 +12,20 @@ export const AdminVarRouter = trpc
         vars,
       };
     },
+  })
+
+  .query('getOne', {
+    input: z.object({
+      id: z.number(),
+    }),
+    async resolve({ input }) {
+      const config = await prisma.adminVariable.findFirstOrThrow({
+        where: {
+          id: input.id,
+        },
+      });
+      return {
+        config,
+      };
+    },
   });
